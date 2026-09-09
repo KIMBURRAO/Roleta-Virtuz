@@ -5,6 +5,7 @@ import { supabase } from '../../lib/supabase'
 import { useAuth } from '../../features/auth/auth-context'
 import { Button } from '../../components/ui/Button'
 import { Field, Input } from '../../components/ui/Field'
+import { BRAND_ASSETS } from '../../lib/brand'
 
 export function LoginPage() {
   const auth = useAuth()
@@ -31,7 +32,7 @@ export function LoginPage() {
   return (
     <main className="login-page">
       <section className="login-card">
-        <img src="/brand/virtuz-logo-stacked-dark.png" alt="Virtuz" />
+        <img src={BRAND_ASSETS.stackedDark} alt="Virtuz" />
         <div className="login-title"><LockKeyhole /><div><h1>Painel da roleta</h1><p>Acesso exclusivo da equipe.</p></div></div>
         <form onSubmit={(event) => void submit(event)}>
           <Field label="E-mail"><Input type="email" autoComplete="email" value={email} onChange={(event) => setEmail(event.target.value)} required /></Field>

@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import {
   getEligiblePrizes,
+  getForcedPrizeForSpin,
   getTargetRotation,
   pickPrize,
   sanitizeWeight,
@@ -17,6 +18,8 @@ const prize = (overrides: Partial<Prize> = {}): Prize => ({
   currentStock: 10,
   weight: 1,
   active: true,
+  forcedAtSpin: null,
+  forcedEverySpins: null,
   createdAt: '2026-09-08T12:00:00.000Z',
   updatedAt: '2026-09-08T12:00:00.000Z',
   ...overrides,
@@ -54,6 +57,35 @@ describe('pickPrize', () => {
 
   it('devolve null quando não há prêmio', () => {
     expect(pickPrize([], true, () => 0.5)).toBeNull()
+  })
+})
+
+describe('getForcedPrizeForSpin', () => {
+  it('seleciona o prêmio configurado para cair em um giro exato', () => {
+    const prizes = [
+      prize({ id: 'normal' }),
+      prize({ id: 'camiseta', forcedAtSpin: 5 }),
+    ]
+
+    expect(getForcedPrizeForSpin(prizes, 5, true)?.id).toBe('camiseta')
+  })
+
+  it('seleciona o prêmio configurado para repetir a cada intervalo de giros', () => {
+    const prizes = [
+      prize({ id: 'normal' }),
+      prize({ id: 'squeeze', forcedEverySpins: 3 }),
+    ]
+
+    expect(getForcedPrizeForSpin(prizes, 6, true)?.id).toBe('squeeze')
+  })
+
+  it('ignora regras programadas de prêmios sem estoque quando o estoque está ligado', () => {
+    const prizes = [
+      prize({ id: 'sem-estoque', currentStock: 0, forcedAtSpin: 2 }),
+      prize({ id: 'normal' }),
+    ]
+
+    expect(getForcedPrizeForSpin(prizes, 2, true)).toBeNull()
   })
 })
 

@@ -18,6 +18,8 @@ export function mapPrize(row: Row): Prize {
     currentStock: number(row.current_stock),
     weight: number(row.weight, 1),
     active: boolean(row.active, true),
+    forcedAtSpin: row.forced_at_spin == null ? null : number(row.forced_at_spin),
+    forcedEverySpins: row.forced_every_spins == null ? null : number(row.forced_every_spins),
     createdAt: string(row.created_at, new Date(0).toISOString()),
     updatedAt: string(row.updated_at, new Date(0).toISOString()),
   }
@@ -57,6 +59,7 @@ export function mapSpin(row: Row): SpinResult {
     prizeImageUrl: nullableString(row.prize_image_url ?? row.prize_image_url_snapshot),
     prizeColor: string(row.prize_color ?? row.prize_color_snapshot, '#08C900'),
     stockAfterSpin: number(row.stock_after_spin),
+    spinNumber: row.spin_number == null ? null : number(row.spin_number),
     createdAt: string(row.created_at, new Date().toISOString()),
     source: string(row.source, 'online') === 'offline' ? 'offline' : 'online',
     syncStatus: string(row.sync_status, 'confirmed') === 'conflict' ? 'conflict' : string(row.sync_status) === 'pending' ? 'pending' : 'confirmed',

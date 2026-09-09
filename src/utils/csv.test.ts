@@ -12,6 +12,7 @@ describe('historyToCsv', () => {
       prizeImageUrl: null,
       prizeColor: '#00AA00',
       stockAfterSpin: 4,
+      spinNumber: 12,
       createdAt: '2026-09-08T15:30:00.000Z',
       source: 'online',
       syncStatus: 'confirmed',

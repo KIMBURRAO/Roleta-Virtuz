@@ -8,6 +8,8 @@ export interface Prize {
   currentStock: number
   weight: number
   active: boolean
+  forcedAtSpin: number | null
+  forcedEverySpins: number | null
   createdAt: string
   updatedAt: string
 }
@@ -45,6 +47,7 @@ export interface SpinResult {
   prizeImageUrl: string | null
   prizeColor: string
   stockAfterSpin: number
+  spinNumber: number | null
   createdAt: string
   source: SpinSource
   syncStatus: SpinSyncStatus
@@ -62,6 +65,8 @@ export interface PrizeInput {
   quantity: number
   weight: number
   active: boolean
+  forcedAtSpin?: number | null
+  forcedEverySpins?: number | null
 }
 
 export interface DashboardMetrics {

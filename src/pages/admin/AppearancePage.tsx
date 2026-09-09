@@ -8,6 +8,7 @@ import { Wheel } from '../../features/wheel/components/Wheel'
 import { fetchAllPrizes, fetchSettings, saveSettings } from '../../services/api'
 import { uploadAsset } from '../../services/storage'
 import type { AppSettings } from '../../types/domain'
+import { BRAND_ASSETS } from '../../lib/brand'
 
 function AppearanceEditor({ initial }: { initial: AppSettings }) {
   const queryClient = useQueryClient()
@@ -26,7 +27,7 @@ function AppearanceEditor({ initial }: { initial: AppSettings }) {
     <div className="color-settings">{([['primaryColor','Cor principal'],['secondaryColor','Cor secundária'],['backgroundColor','Cor de fundo'],['buttonColor','Cor do botão'],['textColor','Cor dos textos']] as const).map(([key,label]) => <Field key={key} label={label}><div className="color-input"><input type="color" value={settings[key]} onChange={(event) => set(key,event.target.value)} /><Input value={settings[key]} onChange={(event) => set(key,event.target.value)} /></div></Field>)}</div>
     <Button onClick={() => void save()} disabled={busy}><Palette /> {busy ? 'Salvando…' : 'Salvar aparência'}</Button>
   </div></section>
-  <section className="appearance-preview"><div className="preview-label">Prévia ao vivo</div><div className="mini-public" style={{ color: settings.textColor, backgroundColor: settings.backgroundColor, backgroundImage: settings.backgroundImageUrl ? `linear-gradient(rgba(0,30,12,.55),rgba(0,30,12,.55)), url(${settings.backgroundImageUrl})` : undefined }}><img src={settings.logoUrl ?? '/brand/virtuz-logo-horizontal-light.png'} alt="" /><p>{settings.eventName}</p><h2>{settings.wheelTitle}</h2><span>{settings.wheelSubtitle}</span>{(prizes.data?.filter((item) => item.active).length ?? 0) > 0 ? <Wheel prizes={prizes.data!.filter((item) => item.active).slice(0, 8)} settings={settings} rotation={0} spinning={false} /> : <div className="wheel-stage" aria-hidden="true"><div className="wheel-pointer" /><div className="wheel-placeholder"><div className="wheel-placeholder__hub"><img src="/brand/virtuz-mark-dark.png" alt="" /></div></div></div>}<button style={{ background: settings.buttonColor }}>Girar roleta</button></div></section></div>
+  <section className="appearance-preview"><div className="preview-label">Prévia ao vivo</div><div className="mini-public" style={{ color: settings.textColor, backgroundColor: settings.backgroundColor, backgroundImage: settings.backgroundImageUrl ? `linear-gradient(rgba(0,30,12,.55),rgba(0,30,12,.55)), url(${settings.backgroundImageUrl})` : undefined }}><img src={settings.logoUrl ?? BRAND_ASSETS.horizontalLight} alt="" /><p>{settings.eventName}</p><h2>{settings.wheelTitle}</h2><span>{settings.wheelSubtitle}</span>{(prizes.data?.filter((item) => item.active).length ?? 0) > 0 ? <Wheel prizes={prizes.data!.filter((item) => item.active).slice(0, 8)} settings={settings} rotation={0} spinning={false} /> : <div className="wheel-stage" aria-hidden="true"><div className="wheel-pointer" /><div className="wheel-placeholder"><div className="wheel-placeholder__hub"><img src={BRAND_ASSETS.markDark} alt="" /></div></div></div>}<button style={{ background: settings.buttonColor }}>Girar roleta</button></div></section></div>
 }
 
 export function AppearancePage() {

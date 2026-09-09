@@ -6,6 +6,8 @@ import { mapHistory, mapPrize, mapSettings, mapSpin, settingsToRow } from './map
 
 export class FriendlyError extends Error {}
 
+const PUBLIC_PRIZE_COLUMNS = 'id,name,description,image_url,color,initial_stock,current_stock,weight,active,created_at,updated_at'
+
 function messageFor(error: unknown, fallback: string): FriendlyError {
   if (error instanceof FriendlyError) return error
   const message = error instanceof Error ? error.message : String(error)
@@ -26,7 +28,7 @@ export async function fetchPublicData(): Promise<{ prizes: Prize[]; settings: Ap
 
   try {
     const [prizesResponse, settingsResponse] = await Promise.all([
-      supabase.from('prizes').select('*').eq('active', true).order('created_at'),
+      supabase.from('prizes').select(PUBLIC_PRIZE_COLUMNS).eq('active', true).order('created_at'),
       supabase.from('app_settings').select('*').eq('id', 1).single(),
     ])
     if (prizesResponse.error) throw prizesResponse.error
@@ -65,6 +67,8 @@ export async function savePrize(input: PrizeInput, existing?: Prize): Promise<Pr
       current_stock: existing ? Math.max(0, existing.currentStock + stockDelta) : input.quantity,
       weight: input.weight,
       active: input.active,
+      forced_at_spin: input.forcedAtSpin ?? null,
+      forced_every_spins: input.forcedEverySpins ?? null,
     }
     const { data, error } = await client.from('prizes').upsert(row).select().single()
     if (error) throw error
@@ -83,6 +87,8 @@ export async function duplicatePrize(prize: Prize): Promise<Prize> {
     quantity: prize.initialStock,
     weight: prize.weight,
     active: false,
+    forcedAtSpin: null,
+    forcedEverySpins: null,
   })
 }
 

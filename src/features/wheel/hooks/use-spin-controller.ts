@@ -45,6 +45,7 @@ export function useSpinController(prizes: Prize[], settings: AppSettings, online
           prizeImageUrl: selected.imageUrl,
           prizeColor: selected.color,
           stockAfterSpin: selected.currentStock,
+          spinNumber: null,
           createdAt: offline.createdAt,
           source: 'offline',
           syncStatus: 'pending',

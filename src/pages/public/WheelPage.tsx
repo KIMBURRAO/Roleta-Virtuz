@@ -8,6 +8,7 @@ import { Wheel } from '../../features/wheel/components/Wheel'
 import { ResultDialog } from '../../features/wheel/components/ResultDialog'
 import { useSpinWebMcp } from '../../lib/webmcp'
 import { canReservePrize } from '../../features/offline/offline-policy'
+import { BRAND_ASSETS } from '../../lib/brand'
 
 export function WheelPage() {
   const online = useOnlineStatus()
@@ -53,7 +54,7 @@ export function WheelPage() {
       {!online && <div className="offline-badge"><WifiOff size={15} /> Modo offline</div>}
 
       <section className="public-copy">
-        <img className="virtuz-logo" src={settings.logoUrl ?? '/brand/virtuz-logo-horizontal-light.png'} alt={settings.eventName || 'Virtuz'} />
+        <img className="virtuz-logo" src={settings.logoUrl ?? BRAND_ASSETS.horizontalLight} alt={settings.eventName || 'Virtuz'} />
         <p className="eyebrow"><Sparkles size={16} /> {settings.eventName || 'Experiência Virtuz'}</p>
         <h1>{settings.wheelTitle}</h1>
         <p className="subtitle">{settings.wheelSubtitle}</p>
@@ -62,7 +63,7 @@ export function WheelPage() {
       <section className="wheel-area" aria-label="Roleta de prêmios">
         {spin.wheelPrizes.length > 0
           ? <Wheel prizes={spin.wheelPrizes} settings={settings} rotation={spin.rotation} spinning={spin.phase === 'spinning'} />
-          : <div className="wheel-stage" aria-hidden="true"><div className="wheel-pointer" /><div className="wheel-placeholder"><div className="wheel-placeholder__hub"><img src="/brand/virtuz-mark-dark.png" alt="" /></div></div></div>}
+          : <div className="wheel-stage" aria-hidden="true"><div className="wheel-pointer" /><div className="wheel-placeholder"><div className="wheel-placeholder__hub"><img src={BRAND_ASSETS.markDark} alt="" /></div></div></div>}
       </section>
 
       <section className="spin-area" aria-live="polite">

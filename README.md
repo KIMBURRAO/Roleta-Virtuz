@@ -128,6 +128,30 @@ No repositório, cadastre em **Settings > Secrets and variables > Actions**:
 
 Também é aceito `VITE_SUPABASE_ANON_KEY` para projetos que ainda usam a chave legada. O workflow ajusta automaticamente o caminho base para `https://USUARIO.github.io/NOME-DO-REPO/`.
 
+## Logos usadas
+
+Os arquivos em `public/brand/` foram preparados a partir das imagens enviadas:
+
+- `virtuz-logo-horizontal-light.png`: logo horizontal clara para topo da roleta e menu admin em fundo verde/escuro;
+- `virtuz-mark-dark.png`: marca “V” no centro da roleta, placeholder e ícone do PWA;
+- `virtuz-mark-light.png`: variação alternativa da marca “V”;
+- `virtuz-logo-stacked-dark.png`: tela de login e áreas claras;
+- `virtuz-logo-ring-light.png`: variação de apoio com símbolo circular.
+
+No painel **Aparência**, se você enviar outra logo, ela substitui apenas a logo do topo. O centro da roleta continua usando a marca “V” curta para ficar legível.
+
+## Regra “prêmio X depois de Y giros”
+
+Em **Admin > Prêmios**, cada prêmio pode ficar em um destes modos:
+
+- **Normal**: entra no sorteio pela chance/peso configurado;
+- **Cair no giro número X**: força esse prêmio em um giro exato do evento atual, por exemplo giro 10;
+- **Cair a cada Y giros**: força esse prêmio nos múltiplos do intervalo, por exemplo 5, 10, 15.
+
+Se o prêmio programado estiver inativo ou sem estoque, ele é ignorado e a roleta volta ao sorteio normal entre os prêmios disponíveis. O contador reinicia quando você usa **Histórico > Novo evento**.
+
+Essa decisão acontece no RPC `spin_wheel`, dentro da mesma transação que baixa o estoque. A consulta pública não expõe as colunas de programação para visitantes.
+
 ## Estrutura principal
 
 ```text

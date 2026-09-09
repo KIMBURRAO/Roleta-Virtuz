@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest'
 import { visiblePrizesForPhase } from './wheel-session'
 import type { Prize } from '../../../types/domain'
 
-const item = (id: string): Prize => ({ id, name: id, description: null, imageUrl: null, color: '#08C900', initialStock: 1, currentStock: 1, weight: 1, active: true, createdAt: '', updatedAt: '' })
+const item = (id: string): Prize => ({ id, name: id, description: null, imageUrl: null, color: '#08C900', initialStock: 1, currentStock: 1, weight: 1, active: true, forcedAtSpin: null, forcedEverySpins: null, createdAt: '', updatedAt: '' })
 
 describe('visiblePrizesForPhase', () => {
   it('congela as fatias do início até o resultado mesmo se o estoque atualizar', () => {

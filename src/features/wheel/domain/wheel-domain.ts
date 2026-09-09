@@ -8,6 +8,22 @@ export function getEligiblePrizes(prizes: Prize[], stockControlEnabled: boolean)
   return prizes.filter((prize) => prize.active && (!stockControlEnabled || prize.currentStock > 0))
 }
 
+export function getForcedPrizeForSpin(
+  prizes: Prize[],
+  spinNumber: number,
+  stockControlEnabled: boolean,
+): Prize | null {
+  if (!Number.isInteger(spinNumber) || spinNumber <= 0) return null
+
+  const eligible = getEligiblePrizes(prizes, stockControlEnabled)
+  return eligible.find((prize) => prize.forcedAtSpin === spinNumber)
+    ?? eligible.find((prize) => {
+      const interval = prize.forcedEverySpins
+      return Number.isInteger(interval) && interval !== null && interval > 0 && spinNumber % interval === 0
+    })
+    ?? null
+}
+
 export function pickPrize(
   prizes: Prize[],
   weighted: boolean,

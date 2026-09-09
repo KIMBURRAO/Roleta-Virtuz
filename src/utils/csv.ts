@@ -7,6 +7,7 @@ function csvCell(value: string | number): string {
 
 export function historyToCsv(items: SpinHistoryItem[], locale = 'pt-BR'): string {
   const rows = items.map((item) => [
+    item.spinNumber ?? '',
     new Intl.DateTimeFormat(locale, { dateStyle: 'short' }).format(new Date(item.createdAt)),
     new Intl.DateTimeFormat(locale, { timeStyle: 'medium' }).format(new Date(item.createdAt)),
     item.prizeName,
@@ -15,7 +16,7 @@ export function historyToCsv(items: SpinHistoryItem[], locale = 'pt-BR'): string
     item.source,
     item.syncStatus,
   ])
-  const header = ['Data', 'Hora', 'Prêmio', 'ID do sorteio', 'Estoque após sorteio', 'Origem', 'Sincronização']
+  const header = ['Giro', 'Data', 'Hora', 'Prêmio', 'ID do sorteio', 'Estoque após sorteio', 'Origem', 'Sincronização']
   return `\uFEFF${[header, ...rows].map((row) => row.map(csvCell).join(',')).join('\r\n')}`
 }
 

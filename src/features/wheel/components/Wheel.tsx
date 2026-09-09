@@ -1,4 +1,5 @@
 import type { AppSettings, Prize } from '../../../types/domain'
+import { BRAND_ASSETS } from '../../../lib/brand'
 
 function point(radius: number, angle: number) {
   const radians = angle * Math.PI / 180
@@ -60,7 +61,7 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
           })}
         </svg>
         </div>
-        <div className="wheel-hub"><img src={settings.logoUrl ?? '/brand/virtuz-mark-dark.png'} alt="" /></div>
+        <div className="wheel-hub"><img src={BRAND_ASSETS.markDark} alt="" /></div>
       </div>
     </div>
   )

@@ -154,6 +154,7 @@ h1 { margin: 0; font-size: clamp(3rem, 7vw, 6.6rem); line-height: .88; letter-sp
 .prize-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; }
 .prize-heading h2 { margin: .4rem 0 0; color: #143e27; font-size: 1.12rem; }
 .status-pill { color: #08752a; font-size: .67rem; font-weight: 900; letter-spacing: .1em; text-transform: uppercase; }
+.rule-pill { display: inline-flex; width: fit-content; align-items: center; margin-top: .2rem; border-radius: 999px; padding: .28rem .65rem; font-size: .76rem; font-weight: 800; background: #ecfdf3; color: #075f2b; border: 1px solid #bbf7d0; }
 .prize-body > p { min-height: 2.6em; color: #748078; font-size: .84rem; line-height: 1.4; }
 .prize-body dl { display: grid; grid-template-columns: repeat(3,1fr); gap: .5rem; margin: 1rem 0; padding: .8rem; border-radius: .7rem; background: #f4f8f4; text-align: center; }
 .prize-body dt { color: #7a877e; font-size: .66rem; text-transform: uppercase; }
@@ -221,7 +222,7 @@ h1 { margin: 0; font-size: clamp(3rem, 7vw, 6.6rem); line-height: .88; letter-sp
 .segmented { display: flex; padding: .2rem; border-radius: .65rem; background: #edf3ee; }
 .segmented button { min-height: 2.4rem; padding: .45rem .75rem; border: 0; border-radius: .5rem; color: #6f7d73; background: transparent; font-weight: 750; }
 .segmented button.active { color: #14602e; background: #fff; box-shadow: 0 2px 7px rgba(0,0,0,.06); }
-.history-head, .history-row { display: grid; grid-template-columns: 1.2fr 1.4fr .7fr .45fr; gap: .8rem; align-items: center; padding: .85rem 1.3rem; }
+.history-head, .history-row { display: grid; grid-template-columns: .45fr 1.2fr 1.4fr .7fr .45fr; gap: .8rem; align-items: center; padding: .85rem 1.3rem; }
 .history-head { color: #78847c; background: #f5f8f5; font-size: .68rem; font-weight: 850; text-transform: uppercase; }
 .history-row { min-height: 3.8rem; border-top: 1px solid #edf1ee; font-size: .84rem; }
 .history-row > span { display: flex; align-items: center; gap: .45rem; color: #66736a; }

@@ -42,7 +42,7 @@ button { -webkit-tap-highlight-color: transparent; }
 .fullscreen-button:hover { background: rgba(0,0,0,.24); }
 .offline-badge { position: absolute; z-index: 4; top: 1rem; left: 1rem; display: flex; align-items: center; gap: .45rem; padding: .55rem .7rem; border: 1px solid rgba(255,255,255,.15); border-radius: 999px; color: #fff; background: rgba(0,0,0,.24); font-size: .8rem; font-weight: 750; }
 .public-copy { align-self: end; max-width: 32rem; }
-.virtuz-logo { display: block; width: clamp(10rem, 21vw, 18rem); height: auto; object-fit: contain; object-position: left center; }
+.virtuz-logo { display: block; width: auto; max-width: clamp(11rem, 22vw, 18rem); height: clamp(2.8rem, 5.8vw, 4.6rem); object-fit: contain; object-position: left center; }
 .eyebrow { display: flex; gap: .5rem; align-items: center; margin: clamp(2rem, 6vh, 4rem) 0 .75rem; color: #9df799; font-size: .82rem; font-weight: 800; letter-spacing: .18em; text-transform: uppercase; }
 h1 { margin: 0; font-size: clamp(3rem, 7vw, 6.6rem); line-height: .88; letter-spacing: -.055em; text-transform: uppercase; }
 .subtitle { max-width: 25rem; margin: 1.25rem 0 0; color: rgba(255,255,255,.78); font-size: clamp(1rem, 1.7vw, 1.35rem); line-height: 1.45; }
@@ -81,7 +81,7 @@ h1 { margin: 0; font-size: clamp(3rem, 7vw, 6.6rem); line-height: .88; letter-sp
 @media (max-width: 820px) {
   .public-shell { grid-template-columns: 1fr; grid-template-rows: auto auto auto; justify-items: center; gap: 1.1rem; padding: 1.35rem 1rem 2rem; text-align: center; }
   .public-copy { align-self: auto; }
-  .virtuz-logo { width: clamp(9rem, 36vw, 13rem); margin-inline: auto; }
+  .virtuz-logo { height: clamp(2.6rem, 12vw, 4rem); max-width: min(72vw, 14rem); margin-inline: auto; object-position: center; }
   .eyebrow { justify-content: center; margin-top: 1.35rem; }
   h1 { font-size: clamp(2.7rem, 11vw, 5.2rem); }
   .subtitle { margin: .75rem auto 0; }

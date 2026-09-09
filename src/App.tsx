@@ -16,6 +16,7 @@ const SettingsPage = lazy(() => import('./pages/admin/SettingsPage').then((modul
 const HistoryPage = lazy(() => import('./pages/admin/HistoryPage').then((module) => ({ default: module.HistoryPage })))
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } } })
+const routerBaseName = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
 
 function OfflineReconciler() {
   useEffect(() => {
@@ -34,7 +35,7 @@ function OfflineReconciler() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter>
+      <BrowserRouter basename={routerBaseName}>
         <AuthProvider>
           <OfflineReconciler />
           <Suspense fallback={<main className="admin-loading"><div className="spinner" /><p>Carregando…</p></main>}>

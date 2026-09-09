@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
 import { Toaster, toast } from 'sonner'
 import { WheelPage } from './pages/public/WheelPage'
@@ -16,7 +16,8 @@ const SettingsPage = lazy(() => import('./pages/admin/SettingsPage').then((modul
 const HistoryPage = lazy(() => import('./pages/admin/HistoryPage').then((module) => ({ default: module.HistoryPage })))
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } } })
-const routerBaseName = import.meta.env.BASE_URL.replace(/\/$/, '') || '/'
+const usesRepositoryBase = import.meta.env.BASE_URL !== '/'
+const Router = usesRepositoryBase ? HashRouter : BrowserRouter
 
 function OfflineReconciler() {
   useEffect(() => {
@@ -35,7 +36,7 @@ function OfflineReconciler() {
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <BrowserRouter basename={routerBaseName}>
+      <Router>
         <AuthProvider>
           <OfflineReconciler />
           <Suspense fallback={<main className="admin-loading"><div className="spinner" /><p>Carregando…</p></main>}>
@@ -55,7 +56,7 @@ function App() {
           </Routes>
           </Suspense>
         </AuthProvider>
-      </BrowserRouter>
+      </Router>
       <Toaster richColors position="top-center" />
     </QueryClientProvider>
   )

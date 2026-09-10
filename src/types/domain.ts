@@ -86,3 +86,21 @@ export interface OfflineSpin {
   status: 'pending' | 'conflict'
   reason?: string
 }
+
+export interface RaffleLead {
+  id: string
+  fullName: string
+  phone: string
+  email: string
+  address: string
+  campaign: string
+  createdAt: string
+}
+
+export interface RaffleLeadInput {
+  fullName: string
+  phone: string
+  email: string
+  address: string
+  campaign?: string
+}

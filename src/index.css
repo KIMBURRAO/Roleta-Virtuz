@@ -257,11 +257,55 @@ h1 { margin: 0; font-size: clamp(3rem, 7vw, 6.6rem); line-height: .88; letter-sp
 @keyframes spin { to { transform: rotate(360deg); } }
 @keyframes shimmer { to { background-position: -100% 0; } }
 
+/* Captura de dados do sorteio */
+.lead-shell { position: relative; display: grid; grid-template-columns: minmax(19rem, .95fr) minmax(20rem, .75fr); gap: clamp(1.5rem, 5vw, 5rem); align-items: center; min-height: 100dvh; padding: clamp(1.3rem, 4vw, 4.5rem); color: #fff; background: radial-gradient(circle at 80% 20%, rgba(14,236,38,.35), transparent 32%), radial-gradient(circle at 15% 80%, rgba(255,255,255,.12), transparent 34%), linear-gradient(135deg,#064f25,#043f1e 56%,#011b0d); overflow: hidden; }
+.lead-shell::before { content: ""; position: absolute; inset: 8% -18% auto auto; width: 44rem; aspect-ratio: 1; border: 2.3rem solid rgba(255,255,255,.045); border-radius: 50%; }
+.lead-hero, .lead-form-card { position: relative; z-index: 1; }
+.lead-logo { width: min(58vw, 15rem); height: 4.2rem; object-fit: contain; object-position: left center; }
+.lead-hero h1 { max-width: 44rem; font-size: clamp(3rem, 8vw, 6.8rem); }
+.lead-hero > p:not(.eyebrow) { max-width: 36rem; margin: 1.35rem 0 0; color: rgba(255,255,255,.82); font-size: clamp(1rem, 1.8vw, 1.32rem); line-height: 1.5; }
+.lead-prize-card { display: grid; width: min(100%, 25rem); gap: .35rem; margin: clamp(1.4rem, 5vh, 4rem) 0 1.2rem; padding: 1.2rem; border: 1px solid rgba(255,255,255,.18); border-radius: 1.4rem; color: #063b1d; background: linear-gradient(135deg,#ffffff,#dfffdc); box-shadow: 0 1.4rem 4rem rgba(0,0,0,.22); }
+.lead-prize-card svg { width: 2.4rem; height: 2.4rem; color: #078e28; }
+.lead-prize-card span { color: #08702a; font-size: .78rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+.lead-prize-card strong { font-size: clamp(1.8rem, 4vw, 3rem); line-height: 1; text-transform: uppercase; }
+.lead-trust { display: inline-flex; align-items: center; gap: .55rem; margin-top: 1.35rem; padding: .75rem .9rem; border: 1px solid rgba(255,255,255,.16); border-radius: 999px; color: #dfffdc; background: rgba(0,0,0,.14); font-size: .86rem; font-weight: 750; }
+.lead-trust svg { width: 1rem; height: 1rem; }
+.lead-form-card { width: min(100%, 31rem); justify-self: end; padding: clamp(1.1rem, 3vw, 1.8rem); border: 1px solid rgba(255,255,255,.52); border-radius: 1.5rem; color: #173221; background: rgba(255,255,255,.96); box-shadow: 0 2rem 7rem rgba(0,0,0,.3); backdrop-filter: blur(12px); }
+.lead-form-card form { display: grid; gap: 1rem; }
+.lead-form-card header { margin-bottom: .3rem; }
+.lead-form-card header span { color: #078e28; font-size: .76rem; font-weight: 900; letter-spacing: .14em; text-transform: uppercase; }
+.lead-form-card header h2 { margin: .25rem 0 0; color: #093e20; font-size: 2rem; letter-spacing: -.04em; }
+.lead-submit { width: 100%; min-height: 3.35rem; margin-top: .35rem; font-size: .95rem; text-transform: uppercase; }
+.lead-disclaimer { display: block; color: #758279; line-height: 1.4; text-align: center; }
+.lead-success { display: grid; place-items: center; min-height: 28rem; text-align: center; }
+.lead-success > svg { width: 4.5rem; height: 4.5rem; margin-bottom: 1rem; color: #078e28; }
+.lead-success h2 { margin: 0; color: #093e20; font-size: 2.2rem; }
+.lead-success p { max-width: 22rem; margin: .65rem 0 1.4rem; color: #64726a; }
+.spin-icon { animation: spin .8s linear infinite; }
+.lead-metrics { grid-template-columns: repeat(2,minmax(0,1fr)); }
+.search-field { position: relative; display: block; }
+.search-field svg { position: absolute; z-index: 1; top: 50%; left: .75rem; width: 1rem; height: 1rem; color: #738178; transform: translateY(-50%); }
+.search-field .input { padding-left: 2.25rem; }
+.leads-head, .leads-row { display: grid; grid-template-columns: 1.05fr 1.05fr 1.35fr .9fr 2.6rem; gap: .8rem; align-items: center; padding: .85rem 1.3rem; }
+.leads-head { color: #78847c; background: #f5f8f5; font-size: .68rem; font-weight: 850; text-transform: uppercase; }
+.leads-row { min-height: 4.5rem; border-top: 1px solid #edf1ee; font-size: .84rem; }
+.leads-row strong, .leads-row code, .leads-row a { display: block; }
+.leads-row strong { color: #153f27; }
+.leads-row code { margin-top: .22rem; color: #738178; }
+.leads-row a { color: #075d2b; text-decoration: none; }
+.leads-row p { margin: 0; color: #55625a; line-height: 1.35; }
+.leads-row > span { display: flex; gap: .4rem; align-items: center; color: #66736a; }
+.leads-row > span svg { width: 1rem; }
+.danger-icon { display: grid; place-items: center; min-height: 2.4rem; border: 1px solid #e8d7d9; border-radius: .6rem; color: #a5222b; background: #fff; }
+.danger-icon:disabled { opacity: .45; }
+.danger-icon svg { width: 1rem; }
+.danger-icon:hover:not(:disabled) { background: #fff0f1; }
+
 @media (max-width: 1050px) { .metric-grid { grid-template-columns: repeat(2,1fr); } .prize-grid { grid-template-columns: repeat(2,1fr); } .appearance-layout { grid-template-columns: 1fr; } .appearance-preview { position: static; } }
 @media (max-width: 720px) {
   .admin-sidebar { inset: auto 0 0; flex-direction: row; width: auto; height: 4.3rem; padding: .4rem; }
   .admin-brand, .public-link, .logout-button { display: none; }
-  .admin-sidebar nav { display: grid; grid-template-columns: repeat(5,1fr); width: 100%; margin: 0; }
+  .admin-sidebar nav { display: grid; grid-template-columns: repeat(6,1fr); width: 100%; margin: 0; }
   .admin-sidebar nav a { justify-content: center; min-width: 0; padding: .45rem .2rem; font-size: .62rem; }
   .admin-sidebar nav a span { display: none; }
   .admin-sidebar nav a svg { width: 1.35rem; height: 1.35rem; }
@@ -279,4 +323,14 @@ h1 { margin: 0; font-size: clamp(3rem, 7vw, 6.6rem); line-height: .88; letter-sp
   .history-head { display: none; }
   .history-row { grid-template-columns: 1fr auto; }
   .history-row code { display: none; }
+  .lead-shell { grid-template-columns: 1fr; padding: 1.1rem; }
+  .lead-logo { margin-inline: auto; object-position: center; }
+  .lead-hero { text-align: center; }
+  .lead-hero .eyebrow { justify-content: center; }
+  .lead-prize-card { margin-inline: auto; }
+  .lead-trust { border-radius: 1rem; }
+  .lead-form-card { justify-self: center; }
+  .leads-head { display: none; }
+  .leads-row { grid-template-columns: 1fr; }
+  .leads-row .danger-icon { width: 100%; }
 }

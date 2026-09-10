@@ -1,4 +1,4 @@
-import type { AppSettings, Prize, SpinHistoryItem, SpinResult } from '../types/domain'
+import type { AppSettings, Prize, RaffleLead, SpinHistoryItem, SpinResult } from '../types/domain'
 import { DEFAULT_SETTINGS } from '../lib/defaults'
 
 type Row = Record<string, unknown>
@@ -68,6 +68,18 @@ export function mapSpin(row: Row): SpinResult {
 
 export function mapHistory(row: Row): SpinHistoryItem {
   return { ...mapSpin(row), eventSessionId: string(row.event_session_id) }
+}
+
+export function mapRaffleLead(row: Row): RaffleLead {
+  return {
+    id: string(row.id),
+    fullName: string(row.full_name),
+    phone: string(row.phone),
+    email: string(row.email),
+    address: string(row.address),
+    campaign: string(row.campaign, 'sorteio-ar-condicionado'),
+    createdAt: string(row.created_at, new Date(0).toISOString()),
+  }
 }
 
 export function settingsToRow(settings: AppSettings): Row {

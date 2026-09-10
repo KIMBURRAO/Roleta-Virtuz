@@ -1,8 +1,9 @@
 import { DEFAULT_SETTINGS } from '../lib/defaults'
 import { isSupabaseConfigured, requireSupabase, supabase } from '../lib/supabase'
-import type { AppSettings, DashboardMetrics, OfflineSpin, Prize, PrizeInput, SpinHistoryItem, SpinResult } from '../types/domain'
+import type { AppSettings, DashboardMetrics, OfflineSpin, Prize, PrizeInput, RaffleLead, RaffleLeadInput, SpinHistoryItem, SpinResult } from '../types/domain'
 import { cachePublicData, getCachedPublicData, markOfflineConflict, pendingOfflineSpins, removeOfflineSpin } from './cache'
-import { mapHistory, mapPrize, mapSettings, mapSpin, settingsToRow } from './mappers'
+import { leadSchema, normalizePhone } from '../features/leads/lead-schema'
+import { mapHistory, mapPrize, mapRaffleLead, mapSettings, mapSpin, settingsToRow } from './mappers'
 
 export class FriendlyError extends Error {}
 
@@ -16,6 +17,7 @@ function messageFor(error: unknown, fallback: string): FriendlyError {
   if (message.includes('PRIZE_UNAVAILABLE')) return new FriendlyError('A lista de prêmios mudou. Tente novamente.')
   if (/JWT|session|refresh_token/i.test(message)) return new FriendlyError('Sua sessão expirou. Entre novamente.')
   if (/42501|permission denied|ADMIN_REQUIRED/i.test(message)) return new FriendlyError('Sua conta não tem permissão para esta ação.')
+  if (/duplicate key|23505|raffle_leads_campaign_email|raffle_leads_campaign_phone/i.test(message)) return new FriendlyError('Este cadastro já existe para o sorteio.')
   if (/Failed to fetch|network|Load failed/i.test(message)) return new FriendlyError('A conexão está instável. Tente novamente em instantes.')
   return new FriendlyError(fallback)
 }
@@ -161,6 +163,48 @@ export async function fetchDashboardMetrics(): Promise<DashboardMetrics> {
 export async function startNewEvent(restoreStock: boolean): Promise<void> {
   const { error } = await requireSupabase().rpc('start_new_event', { p_restore_stock: restoreStock })
   if (error) throw messageFor(error, 'Não foi possível iniciar o novo evento.')
+}
+
+export async function submitRaffleLead(input: RaffleLeadInput): Promise<RaffleLead> {
+  try {
+    const parsed = leadSchema.parse(input)
+    const row = {
+      full_name: parsed.fullName,
+      phone: parsed.phone,
+      email: parsed.email,
+      address: parsed.address,
+      campaign: parsed.campaign,
+    }
+    const { error } = await requireSupabase().from('raffle_leads').insert(row)
+    if (error) throw error
+    return mapRaffleLead({ id: '', created_at: new Date().toISOString(), ...row })
+  } catch (error) {
+    throw messageFor(error, 'Não foi possível concluir o cadastro.')
+  }
+}
+
+export async function fetchRaffleLeads(search = ''): Promise<RaffleLead[]> {
+  try {
+    const term = search.trim()
+    let query = requireSupabase().from('raffle_leads').select('*').order('created_at', { ascending: false }).limit(5000)
+    if (term) {
+      const digits = normalizePhone(term)
+      const filters = [`full_name.ilike.%${term}%`, `email.ilike.%${term}%`, `address.ilike.%${term}%`]
+      if (digits.length >= 3) filters.push(`phone.ilike.%${digits}%`)
+      else filters.push(`phone.ilike.%${term}%`)
+      query = query.or(filters.join(','))
+    }
+    const { data, error } = await query
+    if (error) throw error
+    return (data ?? []).map((row) => mapRaffleLead(row))
+  } catch (error) {
+    throw messageFor(error, 'Não foi possível carregar os cadastros.')
+  }
+}
+
+export async function deleteRaffleLead(leadId: string): Promise<void> {
+  const { error } = await requireSupabase().from('raffle_leads').delete().eq('id', leadId)
+  if (error) throw messageFor(error, 'Não foi possível excluir o cadastro.')
 }
 
 export async function reconcilePendingSpins(): Promise<{ synced: number; conflicts: number }> {

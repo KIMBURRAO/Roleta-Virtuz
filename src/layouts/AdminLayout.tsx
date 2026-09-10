@@ -1,4 +1,4 @@
-import { BarChart3, Gift, History, LogOut, MonitorCog, Palette, Settings } from 'lucide-react'
+import { BarChart3, Gift, History, LogOut, MonitorCog, Palette, Settings, UsersRound } from 'lucide-react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { useAuth } from '../features/auth/auth-context'
 import { BRAND_ASSETS, brandAsset } from '../lib/brand'
@@ -6,6 +6,7 @@ import { BRAND_ASSETS, brandAsset } from '../lib/brand'
 const links = [
   { to: '/admin', label: 'Dashboard', icon: BarChart3, end: true },
   { to: '/admin/premios', label: 'Prêmios', icon: Gift },
+  { to: '/admin/cadastros', label: 'Cadastros', icon: UsersRound },
   { to: '/admin/aparencia', label: 'Aparência', icon: Palette },
   { to: '/admin/configuracoes', label: 'Configurações', icon: Settings },
   { to: '/admin/historico', label: 'Histórico', icon: History },

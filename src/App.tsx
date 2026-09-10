@@ -8,12 +8,14 @@ import { ProtectedAdmin } from './features/auth/ProtectedAdmin'
 import { reconcilePendingSpins } from './services/api'
 
 const LoginPage = lazy(() => import('./pages/admin/LoginPage').then((module) => ({ default: module.LoginPage })))
+const RaffleLeadPage = lazy(() => import('./pages/public/RaffleLeadPage').then((module) => ({ default: module.RaffleLeadPage })))
 const AdminLayout = lazy(() => import('./layouts/AdminLayout').then((module) => ({ default: module.AdminLayout })))
 const DashboardPage = lazy(() => import('./pages/admin/DashboardPage').then((module) => ({ default: module.DashboardPage })))
 const PrizesPage = lazy(() => import('./pages/admin/PrizesPage').then((module) => ({ default: module.PrizesPage })))
 const AppearancePage = lazy(() => import('./pages/admin/AppearancePage').then((module) => ({ default: module.AppearancePage })))
 const SettingsPage = lazy(() => import('./pages/admin/SettingsPage').then((module) => ({ default: module.SettingsPage })))
 const HistoryPage = lazy(() => import('./pages/admin/HistoryPage').then((module) => ({ default: module.HistoryPage })))
+const LeadsPage = lazy(() => import('./pages/admin/LeadsPage').then((module) => ({ default: module.LeadsPage })))
 
 const queryClient = new QueryClient({ defaultOptions: { queries: { retry: 1, refetchOnWindowFocus: false } } })
 const usesRepositoryBase = import.meta.env.BASE_URL !== '/'
@@ -42,11 +44,13 @@ function App() {
           <Suspense fallback={<main className="admin-loading"><div className="spinner" /><p>Carregando…</p></main>}>
           <Routes>
             <Route path="/" element={<WheelPage />} />
+            <Route path="/sorteio-ar" element={<RaffleLeadPage />} />
             <Route path="/admin/login" element={<LoginPage />} />
             <Route element={<ProtectedAdmin />}>
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<DashboardPage />} />
                 <Route path="premios" element={<PrizesPage />} />
+                <Route path="cadastros" element={<LeadsPage />} />
                 <Route path="aparencia" element={<AppearancePage />} />
                 <Route path="configuracoes" element={<SettingsPage />} />
                 <Route path="historico" element={<HistoryPage />} />

@@ -8,7 +8,7 @@ export function brandAsset(path: string, base = import.meta.env.BASE_URL): strin
 }
 
 export const BRAND_ASSETS = {
-  horizontalLight: brandAsset('brand/virtuz-logo-horizontal-light.png'),
+  horizontalLight: brandAsset('brand/virtuz-logo-horizontal-light-v2.png'),
   stackedDark: brandAsset('brand/virtuz-logo-stacked-dark.png'),
   markDark: brandAsset('brand/virtuz-mark-dark.png'),
   markLight: brandAsset('brand/virtuz-mark-light.png'),

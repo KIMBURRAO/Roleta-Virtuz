@@ -8,7 +8,7 @@ import { Wheel } from '../../features/wheel/components/Wheel'
 import { ResultDialog } from '../../features/wheel/components/ResultDialog'
 import { useSpinWebMcp } from '../../lib/webmcp'
 import { canReservePrize } from '../../features/offline/offline-policy'
-import { BRAND_ASSETS } from '../../lib/brand'
+import { BRAND_ASSETS, getLogoFallbackSource } from '../../lib/brand'
 
 export function WheelPage() {
   const online = useOnlineStatus()
@@ -54,7 +54,17 @@ export function WheelPage() {
       {!online && <div className="offline-badge"><WifiOff size={15} /> Modo offline</div>}
 
       <section className="public-copy">
-        <img className="virtuz-logo" src={settings.logoUrl ?? BRAND_ASSETS.horizontalLight} alt={settings.eventName || 'Virtuz'} />
+        <img
+          className="virtuz-logo"
+          src={settings.logoUrl ?? BRAND_ASSETS.horizontalLight}
+          alt={settings.eventName || 'Virtuz'}
+          onError={(event) => {
+            const fallback = getLogoFallbackSource(event.currentTarget.dataset.fallbackApplied === 'true')
+            if (!fallback) return
+            event.currentTarget.dataset.fallbackApplied = 'true'
+            event.currentTarget.src = fallback
+          }}
+        />
         <p className="eyebrow"><Sparkles size={16} /> {settings.eventName || 'Experiência Virtuz'}</p>
         <h1>{settings.wheelTitle}</h1>
         <p className="subtitle">{settings.wheelSubtitle}</p>

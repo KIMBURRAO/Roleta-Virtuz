@@ -14,3 +14,7 @@ export const BRAND_ASSETS = {
   markLight: brandAsset('brand/virtuz-mark-light.png'),
   ringLight: brandAsset('brand/virtuz-logo-ring-light.png'),
 } as const
+
+export function getLogoFallbackSource(hasAlreadyFallenBack: boolean): string | null {
+  return hasAlreadyFallenBack ? null : BRAND_ASSETS.horizontalLight
+}

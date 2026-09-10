@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { BRAND_ASSETS, brandAsset } from './brand'
+import { BRAND_ASSETS, brandAsset, getLogoFallbackSource } from './brand'
 
 describe('brandAsset', () => {
   it('monta caminho relativo ao base path configurado no Vite', () => {
@@ -8,5 +8,10 @@ describe('brandAsset', () => {
 
   it('usa a versão de alto contraste da mesma logo horizontal', () => {
     expect(BRAND_ASSETS.horizontalLight).toContain('virtuz-logo-horizontal-light-v2.png')
+  })
+
+  it('restaura a logo padrão uma única vez quando uma logo configurada falha', () => {
+    expect(getLogoFallbackSource(false)).toBe(BRAND_ASSETS.horizontalLight)
+    expect(getLogoFallbackSource(true)).toBeNull()
   })
 })

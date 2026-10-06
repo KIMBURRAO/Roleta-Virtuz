@@ -7,6 +7,13 @@ export function brandAsset(path: string, base = import.meta.env.BASE_URL): strin
   return `${normalizeBase(base)}${path.replace(/^\/+/, '')}`
 }
 
+export function resolveAssetUrl(value: string | null | undefined): string | null {
+  const source = value?.trim()
+  if (!source) return null
+  if (/^(https?:|data:|blob:)/i.test(source)) return source
+  return brandAsset(source.replace(/^\.\//, '').replace(/^\/+/, ''))
+}
+
 export const BRAND_ASSETS = {
   horizontalLight: brandAsset('brand/virtuz-logo-horizontal-light-v2.png'),
   stackedDark: brandAsset('brand/virtuz-logo-stacked-dark.png'),

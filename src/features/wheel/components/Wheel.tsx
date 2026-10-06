@@ -1,5 +1,5 @@
 import type { AppSettings, Prize } from '../../../types/domain'
-import { BRAND_ASSETS } from '../../../lib/brand'
+import { BRAND_ASSETS, resolveAssetUrl } from '../../../lib/brand'
 
 function point(radius: number, angle: number) {
   const radians = angle * Math.PI / 180
@@ -34,17 +34,21 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
             const size = 360 / prizes.length
             const center = -90 + size * (index + .5)
             const imagePoint = point(prizes.length > 8 ? 82 : 76, center)
+            const imageUrl = resolveAssetUrl(prize.imageUrl)
             return (
               <g key={prize.id}>
                 <path d={slicePath(index, prizes.length)} fill={prize.color} stroke="rgba(255,255,255,.76)" strokeWidth="1.6" />
-                {settings.showImages && prize.imageUrl && (
-                  <image href={prize.imageUrl} x={imagePoint.x - 16} y={imagePoint.y - 16} width="32" height="32" preserveAspectRatio="xMidYMid slice" clipPath={`url(#slice-${prize.id})`} />
+                {settings.showImages && imageUrl && (
+                  <>
+                    <circle cx={imagePoint.x} cy={imagePoint.y} r="17" fill="rgba(255,255,255,.94)" stroke="rgba(0,0,0,.16)" strokeWidth="1" />
+                    <image href={imageUrl} x={imagePoint.x - 14} y={imagePoint.y - 14} width="28" height="28" preserveAspectRatio="xMidYMid slice" clipPath={`url(#slice-${prize.id})`} />
+                  </>
                 )}
                 {settings.showNames && (
                   <text
                     x="150"
                     y="150"
-                    transform={`rotate(${center} 150 150) translate(${prize.imageUrl && settings.showImages ? 100 : 92} 0) rotate(90)`}
+                    transform={`rotate(${center} 150 150) translate(${imageUrl && settings.showImages ? 100 : 92} 0) rotate(90)`}
                     textAnchor="middle"
                     dominantBaseline="middle"
                     fill="#fff"

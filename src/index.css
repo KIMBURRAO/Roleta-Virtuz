@@ -52,12 +52,12 @@ h1 { margin: 0; font-size: clamp(3rem, 7vw, 6.6rem); line-height: .88; letter-sp
 .wheel-placeholder { position: absolute; inset: 3%; border: clamp(.55rem, 1.2vw, .95rem) solid #efffec; border-radius: 50%; background: repeating-conic-gradient(from -22.5deg, #10b908 0deg 44.2deg, #075d2b 44.2deg 45deg, #075d2b 45deg 89.2deg, #0a8a25 89.2deg 90deg); box-shadow: inset 0 0 0 .4rem rgba(0,0,0,.15), 0 0 0 .35rem rgba(255,255,255,.16); }
 .wheel-placeholder::after { content: ""; position: absolute; inset: 4%; border: 1px solid rgba(255,255,255,.22); border-radius: 50%; }
 .wheel-placeholder__hub { position: absolute; z-index: 3; inset: 34%; display: grid; place-items: center; overflow: hidden; border: .4rem solid rgba(255,255,255,.82); border-radius: 50%; background: #fff; box-shadow: 0 .75rem 1.5rem rgba(0,0,0,.28); }
-.wheel-placeholder__hub img { width: 76%; height: 76%; object-fit: contain; }
+.wheel-placeholder__hub img { width: 76%; height: 76%; object-fit: contain; transform: scale(2); }
 .wheel-frame { position: absolute; inset: 3%; display: grid; place-items: center; overflow: hidden; border: clamp(.55rem, 1.2vw, .95rem) solid #efffec; border-radius: 50%; background: #053d1d; box-shadow: inset 0 0 0 .4rem rgba(0,0,0,.15), 0 0 0 .35rem rgba(255,255,255,.16); }
 .wheel-rotor { position: absolute; inset: 0; transform-origin: 50% 50%; will-change: transform; }
 .wheel-svg { display: block; width: 100%; height: 100%; }
 .wheel-hub { position: absolute; z-index: 3; inset: 34%; display: grid; place-items: center; overflow: hidden; border: .4rem solid rgba(255,255,255,.82); border-radius: 50%; background: #fff; box-shadow: 0 .75rem 1.5rem rgba(0,0,0,.28); }
-.wheel-hub img { width: 78%; height: 78%; object-fit: contain; }
+.wheel-hub img { width: 78%; height: 78%; object-fit: contain; transform: scale(2); }
 .spin-area { align-self: start; max-width: 32rem; }
 .empty-message { min-height: 1.5rem; margin: 0 0 .8rem; color: #c6f9c1; font-size: .95rem; }
 .spin-button { width: min(100%, 27rem); min-height: 4.5rem; border: 0; border-radius: 1.25rem; color: #063b1d; background: linear-gradient(180deg, #40ed37, var(--brand-button)); box-shadow: 0 .9rem 2rem rgba(0,0,0,.22), inset 0 1px rgba(255,255,255,.55); font-size: clamp(1.15rem, 2vw, 1.5rem); font-weight: 950; letter-spacing: .055em; text-transform: uppercase; }
@@ -132,6 +132,7 @@ h1 { margin: 0; font-size: clamp(3rem, 7vw, 6.6rem); line-height: .88; letter-sp
 .compact-prizes { display: grid; }
 .compact-prizes > div { display: grid; grid-template-columns: auto 2.7rem 1fr auto; gap: .75rem; align-items: center; min-height: 4.5rem; padding: .65rem 1.4rem; border-bottom: 1px solid #edf1ee; }
 .compact-prizes img, .image-fallback { display: grid; place-items: center; width: 2.7rem; height: 2.7rem; border-radius: .65rem; object-fit: cover; color: #15913a; background: #e9f7eb; }
+.compact-prizes [hidden] { display: none !important; }
 .image-fallback svg { width: 1.2rem; }
 .compact-prizes strong, .compact-prizes span { display: block; }
 .compact-prizes span { color: #849087; font-size: .75rem; }
@@ -147,9 +148,11 @@ h1 { margin: 0; font-size: clamp(3rem, 7vw, 6.6rem); line-height: .88; letter-sp
 .prize-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 1rem; }
 .prize-card { overflow: hidden; border: 1px solid #dfe9e1; border-radius: 1.1rem; background: #fff; box-shadow: 0 .5rem 1.8rem rgba(11,73,33,.045); }
 .prize-card--inactive { opacity: .68; }
-.prize-visual { display: grid; place-items: center; height: 10rem; color: rgba(255,255,255,.8); }
-.prize-visual img { width: 100%; height: 100%; object-fit: cover; }
-.prize-visual > svg { width: 3rem; height: 3rem; }
+.prize-visual { display: grid; place-items: center; height: 10rem; padding: .75rem; color: rgba(255,255,255,.8); }
+.prize-visual__image { display: grid; place-items: center; width: 100%; height: 100%; overflow: hidden; border-radius: .8rem; background: rgba(255,255,255,.94); }
+.prize-visual__image img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.prize-visual__image > svg { width: 3rem; height: 3rem; color: #438454; }
+.prize-visual__image > .image-fallback-hidden { display: none; }
 .prize-body { padding: 1.15rem; }
 .prize-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; }
 .prize-heading h2 { margin: .4rem 0 0; color: #143e27; font-size: 1.12rem; }

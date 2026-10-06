@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { Gift, RotateCcw, WifiOff } from 'lucide-react'
 import type { AppSettings, SpinResult } from '../../../types/domain'
+import { resolveAssetUrl } from '../../../lib/brand'
 
 function playWinSound() {
   const AudioContextClass = window.AudioContext
@@ -19,6 +20,7 @@ function playWinSound() {
 }
 
 export function ResultDialog({ result, settings, onReset }: { result: SpinResult; settings: AppSettings; onReset: () => void }) {
+  const prizeImageUrl = resolveAssetUrl(result.prizeImageUrl)
   useEffect(() => {
     if (settings.confettiEnabled) {
       void import('canvas-confetti').then(({ default: confetti }) => confetti({ particleCount: 110, spread: 85, origin: { y: .62 }, colors: [settings.primaryColor, '#FFFFFF', '#C9FF5B'] }))
@@ -32,7 +34,7 @@ export function ResultDialog({ result, settings, onReset }: { result: SpinResult
         <div className="result-icon"><Gift /></div>
         <p className="result-kicker">Parabéns!</p>
         <h2 id="result-title">Você ganhou</h2>
-        {result.prizeImageUrl && <img className="result-image" src={result.prizeImageUrl} alt="" />}
+        {prizeImageUrl && <img className="result-image" src={prizeImageUrl} alt={`Foto de ${result.prizeName}`} />}
         <strong className="result-prize">{result.prizeName}</strong>
         {result.source === 'offline' && <p className="result-offline"><WifiOff size={16} /> Será sincronizado quando a internet voltar.</p>}
         <button type="button" className="primary-action" onClick={onReset}><RotateCcw size={20} /> Novo sorteio</button>

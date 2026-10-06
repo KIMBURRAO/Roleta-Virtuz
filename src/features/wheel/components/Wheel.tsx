@@ -34,6 +34,8 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
             const size = 360 / prizes.length
             const center = -90 + size * (index + .5)
             const imagePoint = point(prizes.length > 8 ? 82 : 76, center)
+            const labelPoint = point(104, center)
+            const labelRotation = center + 90 > 90 && center + 90 < 270 ? center - 90 : center + 90
             const imageUrl = resolveAssetUrl(prize.imageUrl)
             return (
               <g key={prize.id}>
@@ -46,9 +48,9 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
                 )}
                 {settings.showNames && (
                   <text
-                    x="150"
-                    y="150"
-                    transform={`rotate(${center} 150 150) translate(${imageUrl && settings.showImages ? 100 : 92} 0) rotate(90)`}
+                    x={labelPoint.x}
+                    y={labelPoint.y}
+                    transform={`rotate(${labelRotation} ${labelPoint.x} ${labelPoint.y})`}
                     textAnchor="middle"
                     dominantBaseline="middle"
                     fill="#fff"

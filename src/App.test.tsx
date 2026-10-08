@@ -8,6 +8,6 @@ describe('App', () => {
 
     expect(screen.getByRole('heading', { name: /roda da sorte/i })).toBeVisible()
     expect(await screen.findByText(/os prêmios estão sendo preparados/i)).toBeVisible()
-    expect(screen.getByRole('button', { name: /girar roleta/i })).toBeDisabled()
+    expect(screen.getByRole('button', { name: /girar a roleta/i })).toBeDisabled()
   })
 })

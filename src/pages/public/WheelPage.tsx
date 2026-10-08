@@ -1,5 +1,5 @@
 import { type CSSProperties, useEffect, useMemo } from 'react'
-import { Maximize2, Sparkles, WifiOff } from 'lucide-react'
+import { Maximize2, WifiOff } from 'lucide-react'
 import { DEFAULT_SETTINGS } from '../../lib/defaults'
 import { useOnlineStatus } from '../../hooks/use-online-status'
 import { usePublicData } from '../../features/wheel/hooks/use-public-data'

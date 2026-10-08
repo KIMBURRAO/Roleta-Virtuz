@@ -63,11 +63,8 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
                 <path d={slicePath(index, prizes.length)} fill={prize.color} stroke="rgba(255,255,255,.76)" strokeWidth="1.6" />
                 {settings.showImages && imageUrl && (
                   <>
-                    <clipPath id={`image-clip-${prize.id}`}>
-                      <circle cx={imagePoint.x} cy={imagePoint.y} r={(settings.wheelImageSize / 2) + 3} />
-                    </clipPath>
-                    <circle cx={imagePoint.x} cy={imagePoint.y} r={(settings.wheelImageSize / 2) + 3} fill="rgba(255,255,255,.94)" stroke="rgba(0,0,0,.16)" strokeWidth="1" />
-                    <image href={imageUrl} x={imagePoint.x - (settings.wheelImageSize / 2)} y={imagePoint.y - (settings.wheelImageSize / 2)} width={settings.wheelImageSize} height={settings.wheelImageSize} preserveAspectRatio="xMidYMid slice" clipPath={`url(#image-clip-${prize.id})`} />
+                    <circle cx={imagePoint.x} cy={imagePoint.y} r={settings.wheelImageSize * 0.75} fill="rgba(255,255,255,.94)" stroke="rgba(0,0,0,.16)" strokeWidth="1" />
+                    <image href={imageUrl} x={imagePoint.x - (settings.wheelImageSize / 2)} y={imagePoint.y - (settings.wheelImageSize / 2)} width={settings.wheelImageSize} height={settings.wheelImageSize} preserveAspectRatio="xMidYMid slice" />
                   </>
                 )}
                                 {settings.showNames && (

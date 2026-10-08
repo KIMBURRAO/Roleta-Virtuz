@@ -25,6 +25,7 @@ export interface AppSettings {
   wheelFontFamily: string
   wheelTitleFontSize: number
   wheelLabelFontSize: number
+  wheelImageSize: number
   logoUrl: string | null
   primaryColor: string
   secondaryColor: string

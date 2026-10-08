@@ -11,6 +11,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   wheelFontFamily: 'Inter',
   wheelTitleFontSize: 80,
   wheelLabelFontSize: 14,
+  wheelImageSize: 28,
   logoUrl: null,
   primaryColor: '#08C900',
   secondaryColor: '#064F25',

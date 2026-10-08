@@ -12,6 +12,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   wheelTitleFontSize: 80,
   wheelLabelFontSize: 14,
   wheelImageSize: 28,
+  wheelImageRadius: 70,
   logoUrl: null,
   primaryColor: '#08C900',
   secondaryColor: '#064F25',

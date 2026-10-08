@@ -56,7 +56,7 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
           {prizes.map((prize, index) => {
             const size = 360 / prizes.length
             const center = -90 + size * (index + .5)
-            const imagePoint = point(70, center)
+            const imagePoint = point(settings.wheelImageRadius, center)
             const imageUrl = resolveAssetUrl(prize.imageUrl)
             return (
               <g key={prize.id}>

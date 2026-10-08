@@ -26,6 +26,7 @@ export interface AppSettings {
   wheelTitleFontSize: number
   wheelLabelFontSize: number
   wheelImageSize: number
+  wheelImageRadius: number
   logoUrl: string | null
   primaryColor: string
   secondaryColor: string

@@ -1,0 +1,1 @@
+alter table public.app_settings add column if not exists wheel_image_radius integer not null default 70;

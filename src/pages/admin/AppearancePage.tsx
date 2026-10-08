@@ -23,6 +23,9 @@ function AppearanceEditor({ initial }: { initial: AppSettings }) {
     <Field label="Nome do evento"><Input value={settings.eventName} onChange={(event) => set('eventName', event.target.value)} /></Field>
     <Field label="Título da roleta"><Input value={settings.wheelTitle} onChange={(event) => set('wheelTitle', event.target.value)} /></Field>
     <Field label="Subtítulo"><Input value={settings.wheelSubtitle} onChange={(event) => set('wheelSubtitle', event.target.value)} /></Field>
+    <Field label="Texto Destaque"><Input value={settings.wheelHighlightText ?? ''} onChange={(event) => set('wheelHighlightText', event.target.value)} /></Field>
+    <Field label="Rodapé Linha 1"><Input value={settings.wheelFooterText ?? ''} onChange={(event) => set('wheelFooterText', event.target.value)} /></Field>
+    <Field label="Rodapé Linha 2"><Input value={settings.wheelSubfooterText ?? ''} onChange={(event) => set('wheelSubfooterText', event.target.value)} /></Field>
     <Field label="Fonte da roleta"><select className="select-input" value={settings.wheelFontFamily} onChange={(event) => set('wheelFontFamily', event.target.value)}><option value="Inter">Inter</option><option value="Arial">Arial</option><option value="Georgia">Georgia</option><option value="Trebuchet MS">Trebuchet MS</option><option value="Verdana">Verdana</option></select></Field>
     <Field label={`Tamanho do título: ${settings.wheelTitleFontSize}px`}><input className="range-input" type="range" min="24" max="120" step="1" value={settings.wheelTitleFontSize} onChange={(event) => set('wheelTitleFontSize', Number(event.target.value))} /></Field>
     <Field label={`Tamanho dos nomes na roleta: ${settings.wheelLabelFontSize}px`}><input className="range-input" type="range" min="8" max="24" step="1" value={settings.wheelLabelFontSize} onChange={(event) => set('wheelLabelFontSize', Number(event.target.value))} /><small>Em roletas com muitas fatias, o texto se ajusta para caber.</small></Field>

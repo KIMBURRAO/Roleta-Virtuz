@@ -19,6 +19,9 @@ export interface AppSettings {
   eventName: string
   wheelTitle: string
   wheelSubtitle: string
+  wheelHighlightText: string | null
+  wheelFooterText: string | null
+  wheelSubfooterText: string | null
   wheelFontFamily: string
   wheelTitleFontSize: number
   wheelLabelFontSize: number

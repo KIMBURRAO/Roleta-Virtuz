@@ -28,15 +28,26 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
           role="img"
           aria-label={`Roleta com ${prizes.length} prêmios`}
         >
-          <defs>
-            {prizes.map((prize, index) => <clipPath id={`slice-${prize.id}`} key={prize.id}><path d={slicePath(index, prizes.length)} /></clipPath>)}
+                    <defs>
+            {prizes.map((prize, index) => {
+              const size = 360 / prizes.length
+              const startAngle = -90 + size * index
+              const endAngle = -90 + size * (index + 1)
+              const r = 125 // Radius for text path
+              const p1 = point(r, startAngle)
+              const p2 = point(r, endAngle)
+              return (
+                <g key={prize.id}>
+                  <clipPath id={`slice-${prize.id}`}><path d={slicePath(index, prizes.length)} /></clipPath>
+                  <path id={`text-path-${prize.id}`} d={`M ${p1.x} ${p1.y} A ${r} ${r} 0 0 1 ${p2.x} ${p2.y}`} fill="none" />
+                </g>
+              )
+            })}
           </defs>
           {prizes.map((prize, index) => {
             const size = 360 / prizes.length
             const center = -90 + size * (index + .5)
-            const imagePoint = point(prizes.length > 8 ? 82 : 76, center)
-            const labelPoint = point(104, center)
-            const labelRotation = center + 90 > 90 && center + 90 < 270 ? center - 90 : center + 90
+            const imagePoint = point(70, center)
             const imageUrl = resolveAssetUrl(prize.imageUrl)
             return (
               <g key={prize.id}>
@@ -47,13 +58,8 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
                     <image href={imageUrl} x={imagePoint.x - 14} y={imagePoint.y - 14} width="28" height="28" preserveAspectRatio="xMidYMid slice" clipPath={`url(#slice-${prize.id})`} />
                   </>
                 )}
-                {settings.showNames && (
+                                {settings.showNames && (
                   <text
-                    x={labelPoint.x}
-                    y={labelPoint.y}
-                    transform={`rotate(${labelRotation} ${labelPoint.x} ${labelPoint.y})`}
-                    textAnchor="middle"
-                    dominantBaseline="middle"
                     fill="#fff"
                     fontSize={textSize}
                     fontWeight="800"
@@ -62,7 +68,11 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
                     stroke="rgba(0,0,0,.24)"
                     strokeWidth="2"
                     strokeLinejoin="round"
-                  >{prize.name}</text>
+                  >
+                    <textPath href={`#text-path-${prize.id}`} startOffset="50%" textAnchor="middle" dominantBaseline="middle">
+                      {prize.name}
+                    </textPath>
+                  </text>
                 )}
               </g>
             )

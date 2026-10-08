@@ -62,7 +62,7 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
                     stroke="rgba(0,0,0,.24)"
                     strokeWidth="2"
                     strokeLinejoin="round"
-                  >{prize.name.length > 18 ? `${prize.name.slice(0, 17)}…` : prize.name}</text>
+                  >{prize.name}</text>
                 )}
               </g>
             )

@@ -15,7 +15,7 @@ function slicePath(index: number, count: number): string {
 }
 
 export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[]; settings: AppSettings; rotation: number; spinning: boolean }) {
-  const textSize = prizes.length > 12 ? 8 : prizes.length > 8 ? 10 : prizes.length > 5 ? 12 : 14
+  const textSize = Math.min(settings.wheelLabelFontSize, prizes.length > 12 ? 8 : prizes.length > 8 ? 10 : prizes.length > 5 ? 12 : 14)
   return (
     <div className="wheel-stage">
       <div className="wheel-pointer" />
@@ -56,6 +56,7 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
                     fill="#fff"
                     fontSize={textSize}
                     fontWeight="800"
+                    fontFamily={settings.wheelFontFamily}
                     paintOrder="stroke"
                     stroke="rgba(0,0,0,.24)"
                     strokeWidth="2"

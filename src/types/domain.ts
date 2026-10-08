@@ -19,6 +19,9 @@ export interface AppSettings {
   eventName: string
   wheelTitle: string
   wheelSubtitle: string
+  wheelFontFamily: string
+  wheelTitleFontSize: number
+  wheelLabelFontSize: number
   logoUrl: string | null
   primaryColor: string
   secondaryColor: string

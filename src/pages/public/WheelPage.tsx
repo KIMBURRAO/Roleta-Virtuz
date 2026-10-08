@@ -25,6 +25,8 @@ export function WheelPage() {
     '--brand-background': settings.backgroundColor,
     '--brand-text': settings.textColor,
     '--brand-button': settings.buttonColor,
+    '--wheel-font-family': settings.wheelFontFamily,
+    '--wheel-title-size': `${settings.wheelTitleFontSize}px`,
     ...(settings.backgroundImageUrl ? { '--brand-background-image': `url(${settings.backgroundImageUrl})` } : {}),
   }) as CSSProperties, [settings])
 

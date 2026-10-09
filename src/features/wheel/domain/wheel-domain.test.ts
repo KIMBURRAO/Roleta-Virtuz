@@ -17,7 +17,7 @@ const prize = (overrides: Partial<Prize> = {}): Prize => ({
   initialStock: 10,
   currentStock: 10,
   weight: 1,
-  active: true,
+  active: true, hideInRoleta2: false,
   forcedAtSpin: null,
   forcedEverySpins: null,
   createdAt: '2026-09-08T12:00:00.000Z',

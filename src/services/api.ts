@@ -241,11 +241,10 @@ export function subscribeToPublicChanges(onChange: () => void): () => void {
   return () => { void client.removeChannel(channel) }
 }
 
-export function offlineSpinFromPrize(prize: Prize, clientSpinId: string, isRoleta2 = false): OfflineSpin {
+export function offlineSpinFromPrize(prize: Prize, clientSpinId: string): OfflineSpin {
   return {
     clientSpinId,
     prizeId: prize.id,
-    isRoleta2,
     prizeName: prize.name,
     prizeImageUrl: prize.imageUrl,
     prizeColor: prize.color,

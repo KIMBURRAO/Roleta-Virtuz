@@ -77,6 +77,7 @@ export interface PrizeInput {
   quantity: number
   weight: number
   active: boolean
+  hideInRoleta2?: boolean
   forcedAtSpin?: number | null
   forcedEverySpins?: number | null
 }

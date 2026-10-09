@@ -44,6 +44,7 @@ function App() {
           <Suspense fallback={<main className="admin-loading"><div className="spinner" /><p>Carregando…</p></main>}>
           <Routes>
             <Route path="/" element={<WheelPage />} />
+            <Route path="/roleta-2" element={<WheelPage isRoleta2 />} />
             <Route path="/sorteio-ar" element={<RaffleLeadPage />} />
             <Route path="/admin/login" element={<LoginPage />} />
             <Route element={<ProtectedAdmin />}>

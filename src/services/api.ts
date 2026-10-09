@@ -69,6 +69,7 @@ export async function savePrize(input: PrizeInput, existing?: Prize): Promise<Pr
       current_stock: existing ? Math.max(0, existing.currentStock + stockDelta) : input.quantity,
       weight: input.weight,
       active: input.active,
+      hide_in_roleta_2: input.hideInRoleta2,
       forced_at_spin: input.forcedAtSpin ?? null,
       forced_every_spins: input.forcedEverySpins ?? null,
     }
@@ -89,6 +90,7 @@ export async function duplicatePrize(prize: Prize): Promise<Prize> {
     quantity: prize.initialStock,
     weight: prize.weight,
     active: false,
+    hideInRoleta2: prize.hideInRoleta2,
     forcedAtSpin: null,
     forcedEverySpins: null,
   })
@@ -109,9 +111,9 @@ export async function addStock(prizeId: string, quantity: number): Promise<void>
   if (error) throw messageFor(error, 'Não foi possível adicionar o estoque.')
 }
 
-export async function spinOnline(clientSpinId: string): Promise<SpinResult> {
+export async function spinOnline(clientSpinId: string, isRoleta2 = false): Promise<SpinResult> {
   try {
-    const { data, error } = await requireSupabase().rpc('spin_wheel', { p_client_spin_id: clientSpinId })
+    const { data, error } = await requireSupabase().rpc('spin_wheel', { p_client_spin_id: clientSpinId, p_is_roleta_2: isRoleta2 })
     if (error) throw error
     const row = Array.isArray(data) ? data[0] : data
     if (!row) throw new FriendlyError('Não há prêmios disponíveis para sortear.')
@@ -239,10 +241,11 @@ export function subscribeToPublicChanges(onChange: () => void): () => void {
   return () => { void client.removeChannel(channel) }
 }
 
-export function offlineSpinFromPrize(prize: Prize, clientSpinId: string): OfflineSpin {
+export function offlineSpinFromPrize(prize: Prize, clientSpinId: string, isRoleta2 = false): OfflineSpin {
   return {
     clientSpinId,
     prizeId: prize.id,
+    isRoleta2,
     prizeName: prize.name,
     prizeImageUrl: prize.imageUrl,
     prizeColor: prize.color,

@@ -10,7 +10,7 @@ import { useSpinWebMcp } from '../../lib/webmcp'
 import { canReservePrize } from '../../features/offline/offline-policy'
 import { BRAND_ASSETS, getLogoFallbackSource } from '../../lib/brand'
 
-export function WheelPage() {
+export function WheelPage({ isRoleta2 = false }: { isRoleta2?: boolean }) {
   const online = useOnlineStatus()
   const publicData = usePublicData()
   const prizes = publicData.data?.prizes ?? []
@@ -69,7 +69,7 @@ export function WheelPage() {
         />
         <h1>{settings.wheelTitle}</h1>
         <p className="subtitle">{settings.wheelSubtitle}</p>
-        {settings.wheelHighlightText && <div className="highlight-badge">{settings.wheelHighlightText}</div>}
+        {settings.wheelHighlightText && <div className="highlight-badge">{isRoleta2 ? settings.wheelHighlightText2 : settings.wheelHighlightText}</div>}
       </section>
 
       <section className="wheel-area" aria-label="Roleta de prêmios">
@@ -84,8 +84,8 @@ export function WheelPage() {
           {spin.phase === 'requesting' ? 'Preparando...' : spin.phase === 'spinning' ? 'Girando...' : 'GIRAR A ROLETA'}
         </button>
         <div className="wheel-footer">
-          {settings.wheelFooterText && <p className="footer-line1">{settings.wheelFooterText}</p>}
-          {settings.wheelSubfooterText && <p className="footer-line2">{settings.wheelSubfooterText}</p>}
+          {settings.wheelFooterText && <p className="footer-line1">{isRoleta2 ? settings.wheelFooterText2 : settings.wheelFooterText}</p>}
+          {settings.wheelSubfooterText && <p className="footer-line2">{isRoleta2 ? settings.wheelSubfooterText2 : settings.wheelSubfooterText}</p>}
         </div>
       </section>
 

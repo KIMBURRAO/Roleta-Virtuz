@@ -8,6 +8,7 @@ export interface Prize {
   currentStock: number
   weight: number
   active: boolean
+  hideInRoleta2: boolean
   forcedAtSpin: number | null
   forcedEverySpins: number | null
   createdAt: string
@@ -21,7 +22,10 @@ export interface AppSettings {
   wheelSubtitle: string
   wheelHighlightText: string | null
   wheelFooterText: string | null
-  wheelSubfooterText: string | null
+  wheelSubfooterText: string
+  wheelHighlightText2: string
+  wheelFooterText2: string
+  wheelSubfooterText2: string | null
   wheelFontFamily: string
   wheelTitleFontSize: number
   wheelLabelFontSize: number

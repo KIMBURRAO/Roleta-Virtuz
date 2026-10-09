@@ -17,6 +17,7 @@ describe('historyToCsv', () => {
       source: 'online',
       syncStatus: 'confirmed',
       eventSessionId: 'event-1',
+      campaignSlug: 'default',
     }
 
     const csv = historyToCsv([row], 'pt-BR')

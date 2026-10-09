@@ -1,3 +1,4 @@
+import { useAdminCampaign } from '../../features/campaigns/CampaignContext'
 import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { ImageUp, Palette } from 'lucide-react'
@@ -12,7 +13,8 @@ import { BRAND_ASSETS } from '../../lib/brand'
 
 function AppearanceEditor({ initial }: { initial: AppSettings }) {
   const queryClient = useQueryClient()
-  const prizes = useQuery({ queryKey: ['admin-prizes'], queryFn: fetchAllPrizes })
+  const { campaignSlug } = useAdminCampaign()
+  const prizes = useQuery({ queryKey: ['admin-prizes', campaignSlug], queryFn: () => fetchAllPrizes(campaignSlug) })
   const [settings, setSettings] = useState(initial)
   const [busy, setBusy] = useState(false)
   const set = <K extends keyof AppSettings>(key: K, value: AppSettings[K]) => setSettings((current) => ({ ...current, [key]: value }))
@@ -39,6 +41,7 @@ function AppearanceEditor({ initial }: { initial: AppSettings }) {
 }
 
 export function AppearancePage() {
-  const query = useQuery({ queryKey: ['app-settings'], queryFn: fetchSettings })
+  const { campaignSlug } = useAdminCampaign()
+  const query = useQuery({ queryKey: ['app-settings', campaignSlug], queryFn: () => fetchSettings(campaignSlug) })
   return <div className="admin-page"><header className="page-header"><div><p className="page-kicker">Personalização</p><h1>Aparência</h1><p>Ajuste a identidade sem alterar o código.</p></div></header>{query.isLoading ? <div className="skeleton-grid" /> : query.error || !query.data ? <div className="notice notice--error">Não foi possível carregar a aparência.</div> : <AppearanceEditor key={query.data.updatedAt} initial={query.data} />}</div>
 }

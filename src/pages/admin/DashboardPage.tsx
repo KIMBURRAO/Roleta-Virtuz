@@ -1,11 +1,13 @@
+import { useAdminCampaign } from '../../features/campaigns/CampaignContext'
 import { useQuery } from '@tanstack/react-query'
 import { AlertTriangle, Boxes, Gift, RotateCw } from 'lucide-react'
 import { fetchAllPrizes, fetchDashboardMetrics } from '../../services/api'
 import { resolveAssetUrl } from '../../lib/brand'
 
 export function DashboardPage() {
-  const metrics = useQuery({ queryKey: ['dashboard-metrics'], queryFn: fetchDashboardMetrics })
-  const prizes = useQuery({ queryKey: ['admin-prizes'], queryFn: fetchAllPrizes })
+  const { campaignSlug } = useAdminCampaign()
+  const metrics = useQuery({ queryKey: ['dashboard-metrics'], queryFn: () => fetchDashboardMetrics(campaignSlug) })
+  const prizes = useQuery({ queryKey: ['admin-prizes', campaignSlug], queryFn: () => fetchAllPrizes(campaignSlug) })
   const cards = [
     { label: 'Sorteios hoje', value: metrics.data?.spinsToday ?? '—', icon: RotateCw },
     { label: 'Prêmios sorteados', value: metrics.data?.prizesDrawn ?? '—', icon: Gift },

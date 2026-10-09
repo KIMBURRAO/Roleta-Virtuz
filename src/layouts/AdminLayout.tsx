@@ -13,6 +13,7 @@ const links = [
 ]
 
 export function AdminLayout() {
+
   const auth = useAuth()
   return (
     <div className="admin-shell">

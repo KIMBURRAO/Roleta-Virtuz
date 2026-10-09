@@ -1,3 +1,4 @@
+import { useAdminCampaign } from '../../features/campaigns/CampaignContext'
 import { useState } from 'react'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { Copy, Edit3, Gift, PackagePlus, Plus, Power, Trash2 } from 'lucide-react'
@@ -16,11 +17,12 @@ function prizeRuleLabel(prize: Prize): string | null {
 }
 
 export function PrizesPage() {
+  const { campaignSlug } = useAdminCampaign()
   const queryClient = useQueryClient()
-  const query = useQuery({ queryKey: ['admin-prizes'], queryFn: fetchAllPrizes })
+  const query = useQuery({ queryKey: ['admin-prizes', campaignSlug], queryFn: () => fetchAllPrizes(campaignSlug) })
   const [editing, setEditing] = useState<Prize | 'new' | null>(null)
   const [restocking, setRestocking] = useState<Prize | null>(null)
-  const refresh = async () => { await Promise.all([queryClient.invalidateQueries({ queryKey: ['admin-prizes'] }), queryClient.invalidateQueries({ queryKey: ['public-data'] }), queryClient.invalidateQueries({ queryKey: ['dashboard-metrics'] })]) }
+  const refresh = async () => { await Promise.all([queryClient.invalidateQueries({ queryKey: ['admin-prizes', campaignSlug] }), queryClient.invalidateQueries({ queryKey: ['public-data'] }), queryClient.invalidateQueries({ queryKey: ['dashboard-metrics'] })]) }
   const action = useMutation({ mutationFn: async (operation: () => Promise<unknown>) => operation(), onSuccess: () => void refresh(), onError: (error) => toast.error(error instanceof Error ? error.message : 'A ação não pôde ser concluída.') })
 
   const handleSave = async (input: PrizeInput, prize?: Prize) => { await savePrize(input, prize); await refresh(); toast.success('Prêmio salvo.'); setEditing(null) }
@@ -30,7 +32,7 @@ export function PrizesPage() {
     {query.error && <div className="notice notice--error">{query.error.message}</div>}
     {query.isLoading ? <div className="skeleton-grid" /> : query.data?.length === 0 ? <div className="panel admin-empty"><Gift /><h2>Nenhum prêmio cadastrado</h2><p>A roleta permanecerá pausada até o primeiro cadastro.</p><Button onClick={() => setEditing('new')}><Plus /> Adicionar primeiro prêmio</Button></div> :
       <section className="prize-grid">{query.data?.map((prize) => { const imageUrl = resolveAssetUrl(prize.imageUrl); return <article className={prize.active ? 'prize-card' : 'prize-card prize-card--inactive'} key={prize.id}><div className="prize-visual" style={{ background: prize.color }}><div className="prize-visual__image">{imageUrl ? <img src={imageUrl} alt={`Foto de ${prize.name}`} onError={(event) => { event.currentTarget.hidden = true; event.currentTarget.nextElementSibling?.classList.remove('image-fallback-hidden') }} /> : null}<Gift className={imageUrl ? 'image-fallback-hidden' : undefined} /></div></div><div className="prize-body"><div className="prize-heading"><div><span className="status-pill">{prize.active ? 'Ativo' : 'Inativo'}</span><h2>{prize.name}</h2></div><span className="color-dot color-dot--large" style={{ background: prize.color }} /></div>{prize.description && <p>{prize.description}</p>}{prizeRuleLabel(prize) && <span className="rule-pill">{prizeRuleLabel(prize)}</span>}<dl><div><dt>Inicial</dt><dd>{prize.initialStock}</dd></div><div><dt>Disponível</dt><dd className={prize.currentStock === 0 ? 'stock-zero' : ''}>{prize.currentStock}</dd></div><div><dt>Chance</dt><dd>{((prize.weight / (query.data?.filter(p => p.active).reduce((s, p) => s + p.weight, 0) || 1)) * 100).toFixed(1)}%</dd></div></dl><div className="card-actions"><button title="Editar" onClick={() => setEditing(prize)}><Edit3 /></button><button title="Adicionar estoque" onClick={() => setRestocking(prize)}><PackagePlus /></button><button title="Duplicar" onClick={() => action.mutate(() => duplicatePrize(prize))}><Copy /></button><button title={prize.active ? 'Desativar' : 'Ativar'} onClick={() => action.mutate(() => setPrizeActive(prize.id, !prize.active))}><Power /></button><button className="danger-icon" title="Excluir" onClick={() => { if (window.confirm(`Excluir “${prize.name}”? O histórico existente será preservado.`)) action.mutate(() => deletePrize(prize.id)) }}><Trash2 /></button></div></div></article> })}</section>}
-    {editing && <PrizeFormDialog prize={editing === 'new' ? undefined : editing} onClose={() => setEditing(null)} onSave={handleSave} />}
+    {editing && <PrizeFormDialog campaignSlug={campaignSlug}  prize={editing === 'new' ? undefined : editing} onClose={() => setEditing(null)} onSave={handleSave} />}
     {restocking && <StockDialog prize={restocking} onClose={() => setRestocking(null)} onAdd={handleStock} />}
   </div>
 }

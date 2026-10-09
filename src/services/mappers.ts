@@ -18,7 +18,9 @@ export function mapPrize(row: Row): Prize {
     currentStock: number(row.current_stock),
     weight: number(row.weight, 1),
     active: boolean(row.active, true),
-    hideInRoleta2: boolean(row.hide_in_roleta_2, false),
+    campaignSlug: string(row.campaign_slug, 'default'),
+    
+    
     forcedAtSpin: row.forced_at_spin == null ? null : number(row.forced_at_spin),
     forcedEverySpins: row.forced_every_spins == null ? null : number(row.forced_every_spins),
     createdAt: string(row.created_at, new Date(0).toISOString()),
@@ -30,15 +32,15 @@ export function mapSettings(row?: Row | null): AppSettings {
   if (!row) return DEFAULT_SETTINGS
   return {
     id: number(row.id, 1),
+    
+    campaignSlug: string(row.campaign_slug, 'default'),
     eventName: string(row.event_name, DEFAULT_SETTINGS.eventName),
     wheelTitle: string(row.wheel_title, DEFAULT_SETTINGS.wheelTitle),
     wheelSubtitle: string(row.wheel_subtitle, DEFAULT_SETTINGS.wheelSubtitle),
     wheelHighlightText: nullableString(row.wheel_highlight_text) ?? DEFAULT_SETTINGS.wheelHighlightText,
     wheelFooterText: nullableString(row.wheel_footer_text) ?? DEFAULT_SETTINGS.wheelFooterText,
     wheelSubfooterText: nullableString(row.wheel_subfooter_text) ?? DEFAULT_SETTINGS.wheelSubfooterText,
-    wheelHighlightText2: nullableString(row.wheel_highlight_text_2) ?? DEFAULT_SETTINGS.wheelHighlightText2,
-    wheelFooterText2: nullableString(row.wheel_footer_text_2) ?? DEFAULT_SETTINGS.wheelFooterText2,
-    wheelSubfooterText2: nullableString(row.wheel_subfooter_text_2) ?? DEFAULT_SETTINGS.wheelSubfooterText2,
+    
     wheelFontFamily: string(row.wheel_font_family, DEFAULT_SETTINGS.wheelFontFamily),
     wheelTitleFontSize: number(row.wheel_title_font_size, DEFAULT_SETTINGS.wheelTitleFontSize),
     wheelLabelFontSize: number(row.wheel_label_font_size, DEFAULT_SETTINGS.wheelLabelFontSize),
@@ -79,7 +81,7 @@ export function mapSpin(row: Row): SpinResult {
 }
 
 export function mapHistory(row: Row): SpinHistoryItem {
-  return { ...mapSpin(row), eventSessionId: string(row.event_session_id) }
+  return { ...mapSpin(row), eventSessionId: string(row.event_session_id), campaignSlug: string(row.campaign_slug, 'default') }
 }
 
 export function mapRaffleLead(row: Row): RaffleLead {
@@ -96,16 +98,17 @@ export function mapRaffleLead(row: Row): RaffleLead {
 
 export function settingsToRow(settings: AppSettings): Row {
   return {
-    id: 1,
+    id: settings.id,
+    campaign_slug: settings.campaignSlug,
     event_name: settings.eventName,
     wheel_title: settings.wheelTitle,
     wheel_subtitle: settings.wheelSubtitle,
     wheel_highlight_text: settings.wheelHighlightText,
     wheel_footer_text: settings.wheelFooterText,
     wheel_subfooter_text: settings.wheelSubfooterText,
-    wheel_highlight_text_2: settings.wheelHighlightText2,
-    wheel_footer_text_2: settings.wheelFooterText2,
-    wheel_subfooter_text_2: settings.wheelSubfooterText2,
+
+
+
     wheel_font_family: settings.wheelFontFamily,
     wheel_title_font_size: settings.wheelTitleFontSize,
     wheel_label_font_size: settings.wheelLabelFontSize,

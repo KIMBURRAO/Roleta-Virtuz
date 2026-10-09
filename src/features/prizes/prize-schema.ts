@@ -7,7 +7,7 @@ export const prizeInputSchema = z.object({
   quantity: z.coerce.number().int('Use um número inteiro.').min(0, 'A quantidade não pode ser negativa.'),
   weight: z.coerce.number().finite().positive('O peso deve ser maior que zero.').max(10000, 'Use um peso de até 10.000.'),
   active: z.coerce.boolean(),
-  hideInRoleta2: z.boolean().default(false),
+  campaignSlug: z.string().default('default'),
   forcedAtSpin: z.coerce.number().int('Use um número inteiro.').positive('Use um giro maior que zero.').nullable().optional(),
   forcedEverySpins: z.coerce.number().int('Use um número inteiro.').positive('Use um intervalo maior que zero.').nullable().optional(),
 }).refine((value) => !(value.forcedAtSpin && value.forcedEverySpins), {

@@ -1,3 +1,4 @@
+import { useAdminCampaign } from '../../features/campaigns/CampaignContext'
 import { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { Check, Settings2 } from 'lucide-react'
@@ -25,6 +26,7 @@ function SettingsEditor({ initial }: { initial: AppSettings }) {
 }
 
 export function SettingsPage() {
-  const query = useQuery({ queryKey: ['app-settings'], queryFn: fetchSettings })
+  const { campaignSlug } = useAdminCampaign()
+  const query = useQuery({ queryKey: ['app-settings'], queryFn: () => fetchSettings(campaignSlug) })
   return <div className="admin-page"><header className="page-header"><div><p className="page-kicker">Operação do evento</p><h1>Configurações</h1><p>Controle a experiência pública com opções simples.</p></div><Settings2 /></header>{query.isLoading ? <div className="skeleton-list" /> : query.data ? <SettingsEditor key={query.data.updatedAt} initial={query.data} /> : <div className="notice notice--error">Não foi possível carregar as configurações.</div>}</div>
 }

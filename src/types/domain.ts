@@ -8,7 +8,7 @@ export interface Prize {
   currentStock: number
   weight: number
   active: boolean
-  hideInRoleta2: boolean
+  campaignSlug: string
   forcedAtSpin: number | null
   forcedEverySpins: number | null
   createdAt: string
@@ -17,15 +17,16 @@ export interface Prize {
 
 export interface AppSettings {
   id: number
+  campaignSlug: string
   eventName: string
   wheelTitle: string
   wheelSubtitle: string
   wheelHighlightText: string | null
   wheelFooterText: string | null
   wheelSubfooterText: string
-  wheelHighlightText2: string
-  wheelFooterText2: string
-  wheelSubfooterText2: string | null
+
+
+
   wheelFontFamily: string
   wheelTitleFontSize: number
   wheelLabelFontSize: number
@@ -67,6 +68,7 @@ export interface SpinResult {
 
 export interface SpinHistoryItem extends SpinResult {
   eventSessionId: string
+  campaignSlug: string
 }
 
 export interface PrizeInput {
@@ -77,7 +79,7 @@ export interface PrizeInput {
   quantity: number
   weight: number
   active: boolean
-  hideInRoleta2?: boolean
+  campaignSlug: string
   forcedAtSpin?: number | null
   forcedEverySpins?: number | null
 }
@@ -97,6 +99,7 @@ export interface OfflineSpin {
   prizeColor: string
   createdAt: string
   status: 'pending' | 'conflict'
+  campaignSlug: string
   reason?: string
 }
 

@@ -2,15 +2,14 @@ import type { AppSettings } from '../types/domain'
 
 export const DEFAULT_SETTINGS: AppSettings = {
   id: 1,
+  campaignSlug: 'default',
   eventName: 'Virtuz',
   wheelTitle: 'Roda da sorte',
   wheelSubtitle: 'Gire a roleta e concorra a prêmios!',
   wheelHighlightText: 'CONCORRA A 1 AR CONDICIONADO',
   wheelFooterText: 'Boa sorte! 🍀',
   wheelSubfooterText: 'Seu prêmio será revelado ao final da rodada.',
-  wheelHighlightText2: '',
-  wheelFooterText2: 'Boa sorte! 🍀',
-  wheelSubfooterText2: 'Seu prêmio será revelado ao final da rodada.',
+  
   wheelFontFamily: 'Inter',
   wheelTitleFontSize: 80,
   wheelLabelFontSize: 14,

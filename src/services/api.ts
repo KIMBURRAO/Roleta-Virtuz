@@ -22,7 +22,7 @@ function messageFor(error: unknown, fallback: string): FriendlyError {
   return new FriendlyError(fallback)
 }
 
-export async function fetchPublicData(): Promise<{ prizes: Prize[]; settings: AppSettings; fromCache: boolean }> {
+export async function fetchPublicData(campaignSlug = 'default'): Promise<{ prizes: Prize[]; settings: AppSettings; fromCache: boolean }> {
   if (!supabase) {
     const cached = await getCachedPublicData()
     return { prizes: cached.prizes, settings: cached.settings ?? DEFAULT_SETTINGS, fromCache: true }
@@ -31,7 +31,7 @@ export async function fetchPublicData(): Promise<{ prizes: Prize[]; settings: Ap
   try {
     const [prizesResponse, settingsResponse] = await Promise.all([
       supabase.from('prizes').select(PUBLIC_PRIZE_COLUMNS).eq('active', true).order('created_at'),
-      supabase.from('app_settings').select('*').eq('id', 1).single(),
+      supabase.from('app_settings').select('*').eq('campaign_slug', campaignSlug).single(),
     ])
     if (prizesResponse.error) throw prizesResponse.error
     if (settingsResponse.error) throw settingsResponse.error
@@ -45,9 +45,9 @@ export async function fetchPublicData(): Promise<{ prizes: Prize[]; settings: Ap
   }
 }
 
-export async function fetchAllPrizes(): Promise<Prize[]> {
+export async function fetchAllPrizes(campaignSlug = 'default'): Promise<Prize[]> {
   try {
-    const { data, error } = await requireSupabase().from('prizes').select('*').order('created_at')
+    const { data, error } = await requireSupabase().from('prizes').select('*').eq('campaign_slug', campaignSlug).order('created_at')
     if (error) throw error
     return (data ?? []).map((row) => mapPrize(row))
   } catch (error) {
@@ -69,7 +69,7 @@ export async function savePrize(input: PrizeInput, existing?: Prize): Promise<Pr
       current_stock: existing ? Math.max(0, existing.currentStock + stockDelta) : input.quantity,
       weight: input.weight,
       active: input.active,
-      hide_in_roleta_2: input.hideInRoleta2,
+      campaign_slug: input.campaignSlug,
       forced_at_spin: input.forcedAtSpin ?? null,
       forced_every_spins: input.forcedEverySpins ?? null,
     }
@@ -90,7 +90,7 @@ export async function duplicatePrize(prize: Prize): Promise<Prize> {
     quantity: prize.initialStock,
     weight: prize.weight,
     active: false,
-    hideInRoleta2: prize.hideInRoleta2,
+    campaignSlug: prize.campaignSlug,
     forcedAtSpin: null,
     forcedEverySpins: null,
   })
@@ -111,9 +111,9 @@ export async function addStock(prizeId: string, quantity: number): Promise<void>
   if (error) throw messageFor(error, 'Não foi possível adicionar o estoque.')
 }
 
-export async function spinOnline(clientSpinId: string, isRoleta2 = false): Promise<SpinResult> {
+export async function spinOnline(clientSpinId: string, campaignSlug = 'default'): Promise<SpinResult> {
   try {
-    const { data, error } = await requireSupabase().rpc('spin_wheel', { p_client_spin_id: clientSpinId, p_is_roleta_2: isRoleta2 })
+    const { data, error } = await requireSupabase().rpc('spin_wheel', { p_client_spin_id: clientSpinId, p_campaign_slug: campaignSlug })
     if (error) throw error
     const row = Array.isArray(data) ? data[0] : data
     if (!row) throw new FriendlyError('Não há prêmios disponíveis para sortear.')
@@ -123,9 +123,9 @@ export async function spinOnline(clientSpinId: string, isRoleta2 = false): Promi
   }
 }
 
-export async function fetchSettings(): Promise<AppSettings> {
+export async function fetchSettings(campaignSlug = 'default'): Promise<AppSettings> {
   if (!isSupabaseConfigured) return DEFAULT_SETTINGS
-  const { data, error } = await requireSupabase().from('app_settings').select('*').eq('id', 1).single()
+  const { data, error } = await requireSupabase().from('app_settings').select('*').eq('campaign_slug', campaignSlug).single()
   if (error) throw messageFor(error, 'Não foi possível carregar as configurações.')
   return mapSettings(data)
 }
@@ -136,9 +136,9 @@ export async function saveSettings(settings: AppSettings): Promise<AppSettings> 
   return mapSettings(data)
 }
 
-export async function fetchHistory(filter: { today?: boolean; prizeId?: string } = {}): Promise<SpinHistoryItem[]> {
+export async function fetchHistory(campaignSlug = 'default', filter: { today?: boolean; prizeId?: string } = {}): Promise<SpinHistoryItem[]> {
   const client = requireSupabase()
-  const { data: session, error: sessionError } = await client.from('event_sessions').select('id').eq('is_current', true).single()
+  const { data: session, error: sessionError } = await client.from('event_sessions').select('id').eq('is_current', true).eq('campaign_slug', campaignSlug).single()
   if (sessionError) throw messageFor(sessionError, 'Não foi possível identificar o evento atual.')
   let query = client.from('spins').select('*').eq('event_session_id', session.id).order('created_at', { ascending: false }).limit(2000)
   if (filter.today) {
@@ -152,8 +152,8 @@ export async function fetchHistory(filter: { today?: boolean; prizeId?: string }
   return (data ?? []).map((row) => mapHistory(row))
 }
 
-export async function fetchDashboardMetrics(): Promise<DashboardMetrics> {
-  const [history, prizes] = await Promise.all([fetchHistory({ today: true }), fetchAllPrizes()])
+export async function fetchDashboardMetrics(campaignSlug = 'default'): Promise<DashboardMetrics> {
+  const [history, prizes] = await Promise.all([fetchHistory(campaignSlug, { today: true }), fetchAllPrizes(campaignSlug)])
   return {
     spinsToday: history.length,
     prizesDrawn: history.filter((item) => item.syncStatus === 'confirmed').length,
@@ -162,8 +162,8 @@ export async function fetchDashboardMetrics(): Promise<DashboardMetrics> {
   }
 }
 
-export async function startNewEvent(restoreStock: boolean): Promise<void> {
-  const { error } = await requireSupabase().rpc('start_new_event', { p_restore_stock: restoreStock })
+export async function startNewEvent(restoreStock: boolean, campaignSlug = 'default'): Promise<void> {
+  const { error } = await requireSupabase().rpc('start_new_event', { p_restore_stock: restoreStock, p_campaign_slug: campaignSlug })
   if (error) throw messageFor(error, 'Não foi possível iniciar o novo evento.')
 }
 
@@ -219,6 +219,7 @@ export async function reconcilePendingSpins(): Promise<{ synced: number; conflic
       p_client_spin_id: spin.clientSpinId,
       p_prize_id: spin.prizeId,
       p_created_at: spin.createdAt,
+    p_campaign_slug: spin.campaignSlug
     })
     if (!error && data) {
       await removeOfflineSpin(spin.clientSpinId)
@@ -245,6 +246,7 @@ export function offlineSpinFromPrize(prize: Prize, clientSpinId: string): Offlin
   return {
     clientSpinId,
     prizeId: prize.id,
+    campaignSlug: prize.campaignSlug,
     prizeName: prize.name,
     prizeImageUrl: prize.imageUrl,
     prizeColor: prize.color,

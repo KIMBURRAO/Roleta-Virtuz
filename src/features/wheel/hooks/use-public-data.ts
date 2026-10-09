@@ -4,13 +4,14 @@ import { fetchPublicData, subscribeToPublicChanges } from '../../../services/api
 
 export const publicDataKey = ['public-data'] as const
 
-export function usePublicData() {
+export function usePublicData(campaignSlug = 'default') {
   const queryClient = useQueryClient()
-  const query = useQuery({ queryKey: publicDataKey, queryFn: fetchPublicData, staleTime: 20_000 })
+  const queryKey = [...publicDataKey, campaignSlug]
+  const query = useQuery({ queryKey, queryFn: () => fetchPublicData(campaignSlug), staleTime: 20_000 })
 
   useEffect(() => subscribeToPublicChanges(() => {
-    void queryClient.invalidateQueries({ queryKey: publicDataKey })
-  }), [queryClient])
+    void queryClient.invalidateQueries({ queryKey })
+  }), [queryClient, queryKey])
 
   return query
 }

@@ -3,6 +3,7 @@ import { BrowserRouter, HashRouter, Route, Routes } from 'react-router-dom'
 import { lazy, Suspense, useEffect } from 'react'
 import { Toaster, toast } from 'sonner'
 import { WheelPage } from './pages/public/WheelPage'
+import { CampaignProvider } from './features/campaigns/CampaignContext'
 import { AuthProvider } from './features/auth/AuthProvider'
 import { ProtectedAdmin } from './features/auth/ProtectedAdmin'
 import { reconcilePendingSpins } from './services/api'
@@ -40,11 +41,12 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <Router>
         <AuthProvider>
+          <CampaignProvider>
           <OfflineReconciler />
           <Suspense fallback={<main className="admin-loading"><div className="spinner" /><p>Carregando…</p></main>}>
           <Routes>
-            <Route path="/" element={<WheelPage />} />
-            <Route path="/roleta-2" element={<WheelPage isRoleta2 />} />
+            <Route path="/" element={<WheelPage campaignSlug="default" />} />
+            <Route path="/roleta-2" element={<WheelPage campaignSlug="ar-condicionado" />} />
             <Route path="/sorteio-ar" element={<RaffleLeadPage />} />
             <Route path="/admin/login" element={<LoginPage />} />
             <Route element={<ProtectedAdmin />}>
@@ -57,9 +59,10 @@ function App() {
                 <Route path="historico" element={<HistoryPage />} />
               </Route>
             </Route>
-            <Route path="*" element={<WheelPage />} />
+            <Route path="*" element={<WheelPage campaignSlug="default" />} />
           </Routes>
           </Suspense>
+        </CampaignProvider>
         </AuthProvider>
       </Router>
       <Toaster richColors position="top-center" />

@@ -7,7 +7,7 @@ import type { Prize, PrizeInput } from '../../types/domain'
 import { prizeInputSchema } from './prize-schema'
 import { uploadAsset } from '../../services/storage'
 
-export function PrizeFormDialog({ prize, onClose, onSave }: { prize?: Prize; onClose: () => void; onSave: (input: PrizeInput, existing?: Prize) => Promise<void> }) {
+export function PrizeFormDialog({ prize, onClose, onSave, campaignSlug = 'default' }: { prize?: Prize; onClose: () => void; onSave: (input: PrizeInput, existing?: Prize) => Promise<void>; campaignSlug?: string }) {
   const initialRuleMode = prize?.forcedAtSpin ? 'exact' : prize?.forcedEverySpins ? 'repeat' : 'normal'
   const [name, setName] = useState(prize?.name ?? '')
   const [description, setDescription] = useState(prize?.description ?? '')
@@ -15,7 +15,7 @@ export function PrizeFormDialog({ prize, onClose, onSave }: { prize?: Prize; onC
   const [quantity, setQuantity] = useState(prize?.initialStock ?? 0)
   const [weight, setWeight] = useState(prize?.weight ?? 1)
   const [active, setActive] = useState(prize?.active ?? true)
-  const [hideInRoleta2, setHideInRoleta2] = useState(prize?.hideInRoleta2 ?? false)
+
   const [ruleMode, setRuleMode] = useState<'normal' | 'exact' | 'repeat'>(initialRuleMode)
   const [forcedAtSpin, setForcedAtSpin] = useState(prize?.forcedAtSpin ?? 1)
   const [forcedEverySpins, setForcedEverySpins] = useState(prize?.forcedEverySpins ?? 1)
@@ -40,7 +40,7 @@ export function PrizeFormDialog({ prize, onClose, onSave }: { prize?: Prize; onC
       forcedAtSpin: ruleMode === 'exact' ? forcedAtSpin : null,
       forcedEverySpins: ruleMode === 'repeat' ? forcedEverySpins : null,
     }
-    const parsed = prizeInputSchema.safeParse({ name, description, color, quantity, weight, active, hideInRoleta2, ...forcedRule })
+    const parsed = prizeInputSchema.safeParse({ name, description, color, quantity, weight, active, campaignSlug, ...forcedRule })
     if (!parsed.success) { setError(parsed.error.issues[0]?.message ?? 'Revise os campos.'); return }
     setBusy(true); setError('')
     try {
@@ -69,7 +69,7 @@ export function PrizeFormDialog({ prize, onClose, onSave }: { prize?: Prize; onC
           </div>
           <div className="split-fields">
             <Field label="Chance / Peso" hint="1 = normal; números maiores aparecem mais."><Input type="number" min={0.01} max={10000} step="0.01" value={weight} onChange={(event) => setWeight(Number(event.target.value))} /></Field>
-            <Field label="Status"><label className="switch-row"><input type="checkbox" checked={active} onChange={(event) => setActive(event.target.checked)} /><span>Prêmio ativo</span></label><label className="switch-row" style={{marginTop:"8px"}}><input type="checkbox" checked={hideInRoleta2} onChange={(event) => setHideInRoleta2(event.target.checked)} /><span>Esconder na Roleta 2</span></label></Field>
+            <Field label="Status"><label className="switch-row"><input type="checkbox" checked={active} onChange={(event) => setActive(event.target.checked)} /><span>Prêmio ativo</span></label></Field>
           </div>
           <Field label="Regra de queda" hint="Opcional. Use para garantir um prêmio em um giro específico.">
             <Select value={ruleMode} onChange={(event) => setRuleMode(event.target.value as 'normal' | 'exact' | 'repeat')}>

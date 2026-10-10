@@ -43,14 +43,23 @@ function App() {
         <AuthProvider>
           <CampaignProvider>
           <OfflineReconciler />
-          <Suspense fallback={<main className="admin-loading"><div className="spinner" /><p>Carregando…</p></main>}>
+          <Suspense fallback={<main className="admin-loading"><div className="spinner" /><p>Carregando...</p></main>}>
           <Routes>
             <Route path="/" element={<WheelPage campaignSlug="default" />} />
             <Route path="/roleta-2" element={<WheelPage campaignSlug="ar-condicionado" />} />
             <Route path="/sorteio-ar" element={<RaffleLeadPage />} />
             <Route path="/admin/login" element={<LoginPage />} />
             <Route element={<ProtectedAdmin />}>
-              <Route path="/admin" element={<AdminLayout />}>
+              <Route path="/admin" element={<AdminLayout basePath="/admin" campaignSlug="default" />}>
+                <Route index element={<DashboardPage />} />
+                <Route path="premios" element={<PrizesPage />} />
+                <Route path="cadastros" element={<LeadsPage />} />
+                <Route path="aparencia" element={<AppearancePage />} />
+                <Route path="configuracoes" element={<SettingsPage />} />
+                <Route path="historico" element={<HistoryPage />} />
+              </Route>
+              
+              <Route path="/admin-2" element={<AdminLayout basePath="/admin-2" campaignSlug="ar-condicionado" />}>
                 <Route index element={<DashboardPage />} />
                 <Route path="premios" element={<PrizesPage />} />
                 <Route path="cadastros" element={<LeadsPage />} />

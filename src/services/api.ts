@@ -30,7 +30,7 @@ export async function fetchPublicData(campaignSlug = 'default'): Promise<{ prize
 
   try {
     const [prizesResponse, settingsResponse] = await Promise.all([
-      supabase.from('prizes').select(PUBLIC_PRIZE_COLUMNS).eq('active', true).order('created_at'),
+      supabase.from('prizes').select(PUBLIC_PRIZE_COLUMNS).eq('active', true).eq('campaign_slug', campaignSlug).order('created_at'),
       supabase.from('app_settings').select('*').eq('campaign_slug', campaignSlug).single(),
     ])
     if (prizesResponse.error) throw prizesResponse.error

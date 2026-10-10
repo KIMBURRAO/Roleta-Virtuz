@@ -28,7 +28,7 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
           role="img"
           aria-label={`Roleta com ${prizes.length} prêmios`}
         >
-                              <defs>
+          <defs>
             {prizes.map((prize, index) => {
               const size = 360 / prizes.length
               const startAngle = -90 + size * index
@@ -58,19 +58,32 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
             const center = -90 + size * (index + .5)
             const imagePoint = point(settings.wheelImageRadius, center)
             const imageUrl = resolveAssetUrl(prize.imageUrl)
+            
+            // Limit image size so it doesn't overflow slice lines
+            const sliceWidthAtImage = (2 * Math.PI * settings.wheelImageRadius) / prizes.length
+            const maxImageSize = sliceWidthAtImage * 0.85
+            const actualImageSize = Math.min(settings.wheelImageSize, maxImageSize)
+            const actualCircleR = actualImageSize * 0.75
+
+            // Limit text size so long names don't overlap adjacent slices
+            const sliceWidthAtText = (2 * Math.PI * 125) / prizes.length
+            const maxTextWidth = sliceWidthAtText * 0.94
+            const approxWidth = prize.name.length * (textSize * 0.55)
+            const finalFontSize = approxWidth > maxTextWidth ? textSize * (maxTextWidth / approxWidth) : textSize
+
             return (
               <g key={prize.id}>
                 <path d={slicePath(index, prizes.length)} fill={prize.color} stroke="rgba(255,255,255,.76)" strokeWidth="1.6" />
                 {settings.showImages && imageUrl && (
                   <>
-                    <circle cx={imagePoint.x} cy={imagePoint.y} r={settings.wheelImageSize * 0.75} fill="rgba(255,255,255,.94)" stroke="rgba(0,0,0,.16)" strokeWidth="1" />
-                    <image href={imageUrl} x={imagePoint.x - (settings.wheelImageSize / 2)} y={imagePoint.y - (settings.wheelImageSize / 2)} width={settings.wheelImageSize} height={settings.wheelImageSize} preserveAspectRatio="xMidYMid slice" />
+                    <circle cx={imagePoint.x} cy={imagePoint.y} r={actualCircleR} fill="rgba(255,255,255,.94)" stroke="rgba(0,0,0,.16)" strokeWidth="1" />
+                    <image href={imageUrl} x={imagePoint.x - (actualImageSize / 2)} y={imagePoint.y - (actualImageSize / 2)} width={actualImageSize} height={actualImageSize} preserveAspectRatio="xMidYMid slice" />
                   </>
                 )}
-                                {settings.showNames && (
+                {settings.showNames && (
                   <text
                     fill="#fff"
-                    fontSize={textSize}
+                    fontSize={finalFontSize}
                     fontWeight="800"
                     fontFamily={settings.wheelFontFamily}
                     paintOrder="stroke"

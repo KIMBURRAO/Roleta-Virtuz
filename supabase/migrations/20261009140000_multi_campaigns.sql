@@ -25,6 +25,7 @@ values (
 alter table public.prizes add column if not exists campaign_slug text not null default 'default';
 
 alter table public.event_sessions add column if not exists campaign_slug text not null default 'default';
+drop index if exists public.event_sessions_one_current_idx;
 drop index if exists public.active_session_idx;
 create unique index active_session_idx on public.event_sessions (campaign_slug) where is_current = true;
 

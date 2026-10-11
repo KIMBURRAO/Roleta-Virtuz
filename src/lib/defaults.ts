@@ -6,7 +6,7 @@ export const DEFAULT_SETTINGS: AppSettings = {
   eventName: 'Virtuz',
   wheelTitle: 'Roda da sorte',
   wheelSubtitle: 'Gire a roleta e concorra a prêmios!',
-  wheelHighlightText: 'CONCORRA A 1 AR CONDICIONADO',
+  wheelHighlightText: '',
   wheelFooterText: 'Boa sorte! 🍀',
   wheelSubfooterText: 'Seu prêmio será revelado ao final da rodada.',
   

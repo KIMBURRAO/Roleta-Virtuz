@@ -46,6 +46,23 @@ export function WheelPage({ campaignSlug = 'default' }: { campaignSlug?: string 
     else await document.exitFullscreen?.()
   }
 
+  const isArCondicionado = campaignSlug === 'ar-condicionado'
+
+  // Roleta 2 (ar-condicionado): SEMPRE exibe o destaque "CONCORRA A 1 AR CONDICIONADO" (ou o texto do admin se configurado)
+  // Roleta 1 (default): NUNCA exibe texto sobre ar condicionado (somente texto personalizado que não cite ar condicionado)
+  const highlightText = useMemo(() => {
+    if (isArCondicionado) {
+      return settings.wheelHighlightText?.trim() || 'CONCORRA A 1 AR CONDICIONADO'
+    }
+    const current = settings.wheelHighlightText?.trim() ?? ''
+    if (!current) return ''
+    const upper = current.toUpperCase()
+    if (upper.includes('AR CONDICIONADO') || upper.includes('AR-CONDICIONADO')) {
+      return ''
+    }
+    return current
+  }, [isArCondicionado, settings.wheelHighlightText])
+
   return (
     <main className="public-shell" style={theme}>
       {settings.fullscreenButtonEnabled && (
@@ -55,7 +72,7 @@ export function WheelPage({ campaignSlug = 'default' }: { campaignSlug?: string 
       )}
       {!online && <div className="offline-badge"><WifiOff size={15} /> Modo offline</div>}
 
-            <section className="public-copy">
+      <section className="public-copy">
         <img
           className="virtuz-logo"
           src={settings.logoUrl ?? BRAND_ASSETS.horizontalLight}
@@ -69,7 +86,7 @@ export function WheelPage({ campaignSlug = 'default' }: { campaignSlug?: string 
         />
         <h1>{settings.wheelTitle}</h1>
         <p className="subtitle">{settings.wheelSubtitle}</p>
-        {settings.wheelHighlightText && <div className="highlight-badge">{settings.wheelHighlightText}</div>}
+        {highlightText ? <div className="highlight-badge">{highlightText}</div> : null}
       </section>
 
       <section className="wheel-area" aria-label="Roleta de prêmios">

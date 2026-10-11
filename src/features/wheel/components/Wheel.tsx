@@ -17,13 +17,14 @@ function slicePath(index: number, count: number): string {
 export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[]; settings: AppSettings; rotation: number; spinning: boolean }) {
   const scale = prizes.length > 12 ? 0.6 : prizes.length > 8 ? 0.75 : prizes.length > 5 ? 0.85 : 1
   const textSize = settings.wheelLabelFontSize * scale
+
   return (
-    <div className="wheel-stage">
+    <div className="wheel-stage notranslate" translate="no">
       <div className="wheel-pointer" />
       <div className="wheel-frame">
         <div className="wheel-rotor" style={{ transform: `rotate(${rotation}deg)`, transition: spinning ? 'transform 5.2s cubic-bezier(.12,.68,.08,1)' : 'none' }}>
         <svg
-          className="wheel-svg"
+          className="wheel-svg notranslate"
           viewBox="0 0 300 300"
           role="img"
           aria-label={`Roleta com ${prizes.length} prêmios`}
@@ -44,10 +45,21 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
               
               // sweep-flag is 1 for clockwise, 0 for counter-clockwise
               const sweep = isBottom ? 0 : 1
+
+              // Circle image geometry for clipping
+              const center = -90 + size * (index + 0.5)
+              const imagePoint = point(settings.wheelImageRadius || 70, center)
+              const sliceWidthAtImage = (2 * Math.PI * (settings.wheelImageRadius || 70)) / prizes.length
+              const maxImageSize = sliceWidthAtImage * 0.82
+              const actualImageSize = Math.max(10, Math.min(settings.wheelImageSize || 28, maxImageSize))
+              const actualCircleR = actualImageSize * 0.72
               
               return (
                 <g key={prize.id}>
                   <clipPath id={`slice-${prize.id}`}><path d={slicePath(index, prizes.length)} /></clipPath>
+                  <clipPath id={`image-clip-${prize.id}`}>
+                    <circle cx={imagePoint.x} cy={imagePoint.y} r={Math.max(1, actualCircleR - 1)} />
+                  </clipPath>
                   <path id={`text-path-${prize.id}`} d={`M ${p1.x} ${p1.y} A ${r} ${r} 0 0 ${sweep} ${p2.x} ${p2.y}`} fill="none" />
                 </g>
               )
@@ -56,14 +68,14 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
           {prizes.map((prize, index) => {
             const size = 360 / prizes.length
             const center = -90 + size * (index + .5)
-            const imagePoint = point(settings.wheelImageRadius, center)
+            const imagePoint = point(settings.wheelImageRadius || 70, center)
             const imageUrl = resolveAssetUrl(prize.imageUrl)
             
             // Limit image size so it doesn't overflow slice lines
-            const sliceWidthAtImage = (2 * Math.PI * settings.wheelImageRadius) / prizes.length
-            const maxImageSize = sliceWidthAtImage * 0.85
-            const actualImageSize = Math.min(settings.wheelImageSize, maxImageSize)
-            const actualCircleR = actualImageSize * 0.75
+            const sliceWidthAtImage = (2 * Math.PI * (settings.wheelImageRadius || 70)) / prizes.length
+            const maxImageSize = sliceWidthAtImage * 0.82
+            const actualImageSize = Math.max(10, Math.min(settings.wheelImageSize || 28, maxImageSize))
+            const actualCircleR = actualImageSize * 0.72
 
             // Limit text size so long names don't overlap adjacent slices
             const sliceWidthAtText = (2 * Math.PI * 125) / prizes.length
@@ -75,10 +87,26 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
               <g key={prize.id}>
                 <path d={slicePath(index, prizes.length)} fill={prize.color} stroke="rgba(255,255,255,.76)" strokeWidth="1.6" />
                 {settings.showImages && imageUrl && (
-                  <>
-                    <circle cx={imagePoint.x} cy={imagePoint.y} r={actualCircleR} fill="rgba(255,255,255,.94)" stroke="rgba(0,0,0,.16)" strokeWidth="1" />
-                    <image href={imageUrl} x={imagePoint.x - (actualImageSize / 2)} y={imagePoint.y - (actualImageSize / 2)} width={actualImageSize} height={actualImageSize} preserveAspectRatio="xMidYMid slice" />
-                  </>
+                  <g>
+                    <circle
+                      cx={imagePoint.x}
+                      cy={imagePoint.y}
+                      r={actualCircleR}
+                      fill="rgba(255,255,255,.94)"
+                      stroke="rgba(0,0,0,.16)"
+                      strokeWidth="1"
+                    />
+                    <image
+                      href={imageUrl}
+                      xlinkHref={imageUrl}
+                      clipPath={`url(#image-clip-${prize.id})`}
+                      x={imagePoint.x - (actualImageSize / 2)}
+                      y={imagePoint.y - (actualImageSize / 2)}
+                      width={actualImageSize}
+                      height={actualImageSize}
+                      preserveAspectRatio="xMidYMid meet"
+                    />
+                  </g>
                 )}
                 {settings.showNames && (
                   <text
@@ -91,7 +119,13 @@ export function Wheel({ prizes, settings, rotation, spinning }: { prizes: Prize[
                     strokeWidth="2"
                     strokeLinejoin="round"
                   >
-                    <textPath href={`#text-path-${prize.id}`} startOffset="50%" textAnchor="middle" dominantBaseline="middle">
+                    <textPath
+                      href={`#text-path-${prize.id}`}
+                      xlinkHref={`#text-path-${prize.id}`}
+                      startOffset="50%"
+                      textAnchor="middle"
+                      dominantBaseline="middle"
+                    >
                       {prize.name}
                     </textPath>
                   </text>
